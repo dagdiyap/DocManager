@@ -1,0 +1,67 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday
+
+jobs:
+  python-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install pip-audit
+        run: pip install pip-audit bandit
+      
+      - name: Run pip-audit
+        run: |
+          pip-audit --requirement license_server/pyproject.toml || true
+          pip-audit --requirement ca_desktop/backend/pyproject.toml || true
+      
+      - name: Run Bandit
+        run: |
+          bandit -r license_server/src ca_desktop/backend/src shared/ -f json -o bandit-report.json || true
+      
+      - name: Upload Bandit results
+        uses: actions/upload-artifact@v3
+        with:
+          name: bandit-results
+          path: bandit-report.json
+
+  npm-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Audit License Server UI
+        working-directory: license_server/ui
+        run: npm audit --audit-level=moderate || true
+      
+      - name: Audit CA Desktop Frontend
+        working-directory: ca_desktop/frontend
+        run: npm audit --audit-level=moderate || true
+
+  dependency-review:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3
+        with:
+          fail-on-severity: moderate

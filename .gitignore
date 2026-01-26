@@ -1,0 +1,124 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+dist-ssr/
+*.local
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+license_server/data/
+ca_desktop/backend/data/
+ca_desktop/backend/*.db
+license_server/*.db
+
+# Documents and files
+ca_desktop/backend/documents/
+ca_desktop/backend/shared_files/
+shared_files/
+documents/
+
+# Keys and secrets
+*.pem
+*.key
+*.crt
+*.p12
+private_key.pem
+public_key.pem
+.env
+.env.local
+.env.*.local
+secrets/
+
+# Logs
+*.log
+logs/
+ca_desktop/backend/logs/
+
+# Build artifacts
+installer/build/
+installer/dist/
+*.exe
+*.msi
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.iml
+*.suo
+*.ntvs*
+*.njsproj*
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.AppleDouble
+.LSOverride
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*~
+
+# Docker
+docker-compose.override.yml
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
