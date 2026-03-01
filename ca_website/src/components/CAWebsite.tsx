@@ -58,19 +58,25 @@ const TESTIMONIALS = [
   {
     id: 1,
     client_name: 'Rajesh Patil, Manufacturing Unit Owner',
-    text: 'We have been associated with Dagdiya Associates for over 15 years. Their expertise in GST compliance during the transition from VAT was invaluable. CA Lokesh personally ensured our manufacturing unit had zero compliance issues. Their proactive approach to tax planning has saved us lakhs every year.',
+    text: 'We have been associated with Dagdiya Associates for over 15 years. Their expertise in GST compliance during the transition from VAT was invaluable. CA Lokesh personally ensured our manufacturing unit had zero compliance issues.',
     rating: 5,
   },
   {
     id: 2,
-    client_name: 'Priya Sharma, Real Estate Developer',
-    text: 'As a real estate developer, tax complexities are enormous. Dagdiya Associates has been our trusted advisor for 8 years. Their deep knowledge of real estate taxation, RERA compliance, and GST on under-construction properties gives us complete peace of mind. Highly recommended for anyone in the construction industry.',
+    client_name: 'Rajat Sharma, Real Estate Developer',
+    text: 'As a real estate developer, tax complexities are enormous. Dagdiya Associates has been our trusted advisor for 8 years. Their deep knowledge of real estate taxation and RERA compliance gives us complete peace of mind.',
     rating: 5,
   },
   {
     id: 3,
     client_name: 'Amit Deshmukh, Retail Chain Owner',
-    text: 'From a single retail store to a chain of 12 outlets, Dagdiya Associates has been with us every step of the way. Their accounting systems, inventory management advice, and multi-location GST compliance handling is top-notch. CA Lokesh treats our business like his own.',
+    text: 'From a single retail store to a chain of 12 outlets, Dagdiya Associates has been with us every step of the way. Their accounting systems and multi-location GST compliance handling is top-notch.',
+    rating: 5,
+  },
+  {
+    id: 4,
+    client_name: 'Sumit Kulkarni, Startup Founder',
+    text: 'Starting a business is challenging, but Dagdiya Associates made the financial and compliance aspects seamless. Their guidance on company formation, tax planning, and ongoing support has been invaluable for our growth.',
     rating: 5,
   },
 ];
@@ -86,25 +92,25 @@ const INDUSTRIES = [
 
 export const CAWebsite: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-hidden">
       {/* Navigation */}
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm sm:text-base">
                 D
               </div>
-              <span className="text-xl font-bold text-gray-900">{FIRM.name}</span>
+              <span className="text-base sm:text-xl font-bold text-gray-900">{FIRM.name}</span>
             </div>
-            <div className="flex items-center gap-6">
-              <a href="#services" className="hidden sm:inline text-gray-700 hover:text-blue-600 transition font-medium">
+            <div className="flex items-center gap-4 sm:gap-6">
+              <a href="#services" className="hidden sm:inline text-gray-700 hover:text-blue-600 transition font-medium text-sm">
                 Services
               </a>
-              <a href="#about" className="hidden sm:inline text-gray-700 hover:text-blue-600 transition font-medium">
+              <a href="#about" className="hidden sm:inline text-gray-700 hover:text-blue-600 transition font-medium text-sm">
                 About
               </a>
-              <a href="#contact" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold text-sm">
+              <a href="#contact" className="px-4 py-1.5 sm:px-5 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold text-xs sm:text-sm">
                 Contact Us
               </a>
             </div>
@@ -113,7 +119,7 @@ export const CAWebsite: React.FC = () => {
       </nav>
 
       {/* Hero Section with Moving Banner Images */}
-      <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white py-14 sm:py-20 md:py-24 overflow-hidden">
         {/* Animated Background Carousel */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 via-blue-800/90 to-indigo-900/95 z-10"></div>
@@ -146,16 +152,16 @@ export const CAWebsite: React.FC = () => {
                 Your Partner in Financial Excellence
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+            <div className="flex flex-row gap-3 justify-center">
               <a
                 href="#contact"
-                className="px-6 py-3 sm:px-8 sm:py-4 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition font-bold text-base sm:text-lg shadow-xl flex items-center justify-center gap-2"
+                className="px-5 py-2.5 sm:px-7 sm:py-3 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition font-bold text-sm sm:text-base shadow-xl flex items-center justify-center"
               >
                 Get in Touch
               </a>
               <a
                 href="#services"
-                className="px-6 py-3 sm:px-8 sm:py-4 bg-transparent border-2 border-white text-white rounded-lg hover:bg-white/10 transition font-bold text-base sm:text-lg flex items-center justify-center gap-2"
+                className="px-5 py-2.5 sm:px-7 sm:py-3 bg-transparent border-2 border-white text-white rounded-lg hover:bg-white/10 transition font-bold text-sm sm:text-base flex items-center justify-center"
               >
                 Our Services
               </a>
@@ -165,25 +171,23 @@ export const CAWebsite: React.FC = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-16 md:py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+      <section id="about" className="py-12 md:py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="order-2 md:order-1">
-              <div className="inline-block px-4 py-2 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold mb-4">
+              <div className="inline-block px-3 py-1.5 bg-blue-100 text-blue-600 rounded-full text-xs sm:text-sm font-semibold mb-3">
                 About Us
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
-                Excellence Built on <span className="text-blue-600">47 Years of Trust</span>
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 mb-4 md:mb-8 leading-tight">
+                Excellence Built on<br />
+                <span className="text-blue-600">47 Years of Trust</span>
               </h2>
-              <div className="space-y-6 mb-8">
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  Since 1979, we have been the cornerstone of financial excellence for businesses across Maharashtra. Our legacy spans nearly five decades of unwavering commitment to accuracy, compliance, and client success.
+              <div className="space-y-4 mb-6">
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                  Since 1979, we have been the cornerstone of financial excellence for businesses across Maharashtra. What started as a vision to provide ethical accounting services has grown into a trusted partnership with hundreds of businesses.
                 </p>
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  What started as a vision to provide ethical and professional accounting services has grown into a trusted partnership with hundreds of businesses. We don't just manage numbers—we build lasting relationships.
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  Our deep understanding of evolving tax regulations, combined with personalized attention to each client's unique needs, ensures your business stays compliant, competitive, and financially sound. From startups to established enterprises, we've been there through every milestone.
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                  We don't just manage numbers—we build lasting relationships. Our deep understanding of evolving tax regulations ensures your business stays compliant, competitive, and financially sound.
                 </p>
               </div>
               {/* Mobile: Horizontal scroll carousel, Desktop: Grid */}
@@ -220,12 +224,14 @@ export const CAWebsite: React.FC = () => {
               </div>
             </div>
             <div className="order-1 md:order-2 relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                <img
-                  src={FIRM.photo}
-                  alt="CA Lokesh Dagdiya"
-                  className="w-full h-auto object-cover"
-                />
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl mx-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
+                <div className="aspect-[3/4] md:aspect-[4/5]">
+                  <img
+                    src={FIRM.photo}
+                    alt="CA Lokesh Dagdiya"
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
             </div>
@@ -243,13 +249,13 @@ export const CAWebsite: React.FC = () => {
           />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold mb-4">
+          <div className="text-center mb-8 md:mb-16">
+            <div className="inline-block px-3 py-1.5 bg-blue-100 text-blue-600 rounded-full text-xs sm:text-sm font-semibold mb-3">
               What We Do
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Services</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Comprehensive financial solutions designed to meet all your business needs
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-4">Our Services</h2>
+            <p className="text-sm sm:text-base md:text-xl text-gray-600 max-w-2xl mx-auto">
+              Comprehensive financial solutions for your business
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
@@ -272,7 +278,7 @@ export const CAWebsite: React.FC = () => {
       </section>
 
       {/* Industries We Serve */}
-      <section className="py-20 bg-gray-900 relative overflow-hidden">
+      <section className="py-12 md:py-20 bg-gray-900 relative overflow-hidden">
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=1080&fit=crop&q=80"
@@ -281,25 +287,26 @@ export const CAWebsite: React.FC = () => {
           />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">Industries We Serve</h2>
-            <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+          <div className="text-center mb-8 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 md:mb-4">Industries We Serve</h2>
+            <p className="text-sm sm:text-base md:text-xl text-blue-100 max-w-2xl mx-auto">
               Specialized expertise across diverse sectors
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-6">
             {INDUSTRIES.map((industry, idx) => {
               const Icon = industry.icon;
               return (
                 <div
                   key={idx}
-                  className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 text-center hover:shadow-2xl transition-all duration-300 border-2 border-white/20 hover:border-blue-400 group transform hover:-translate-y-2 cursor-pointer"
+                  className="bg-white/95 backdrop-blur-sm rounded-xl p-3 sm:p-4 md:p-6 text-center hover:shadow-2xl transition-all duration-300 border-2 border-white/20 hover:border-blue-400 group cursor-pointer"
                   style={{ animationDelay: `${idx * 50}ms` }}
                 >
-                  <div className={`w-16 h-16 ${industry.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon size={32} className="group-hover:scale-110 transition-transform" />
+                  <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 ${industry.color} rounded-full flex items-center justify-center mx-auto mb-2 md:mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon size={20} className="sm:hidden group-hover:scale-110 transition-transform" />
+                    <Icon size={32} className="hidden sm:block group-hover:scale-110 transition-transform" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 text-sm group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-semibold text-gray-900 text-xs sm:text-sm group-hover:text-blue-600 transition-colors">
                     {industry.name}
                   </h3>
                 </div>
@@ -312,17 +319,18 @@ export const CAWebsite: React.FC = () => {
       {/* Testimonials */}
       <section className="py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Client Testimonials</h2>
-            <p className="text-xl text-gray-600">What our clients say about us</p>
+          <div className="text-center mb-8 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 md:mb-4">Client Testimonials</h2>
+            <p className="text-sm sm:text-base md:text-xl text-gray-600">What our clients say about us</p>
           </div>
-          {/* Mobile: Horizontal scroll, Desktop: Grid */}
-          <div className="overflow-x-auto pb-4 -mx-4 px-4 md:overflow-visible md:mx-0 md:px-0">
-            <div className="flex gap-6 md:grid md:grid-cols-3 min-w-max md:min-w-0">
-              {TESTIMONIALS.map((testimonial) => (
+          {/* Auto-scrolling horizontal carousel */}
+          <div className="overflow-hidden relative">
+            <div className="flex gap-6 animate-scroll-testimonials">
+              {/* Duplicate testimonials for seamless infinite loop */}
+              {[...TESTIMONIALS, ...TESTIMONIALS].map((testimonial, idx) => (
                 <div
-                  key={testimonial.id}
-                  className="bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-blue-600 hover:shadow-xl transition-all duration-300 w-80 md:w-auto flex-shrink-0 md:flex-shrink"
+                  key={`${testimonial.id}-${idx}`}
+                  className="bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-blue-600 hover:shadow-xl transition-all duration-300 w-80 flex-shrink-0"
                 >
                   <div className="flex gap-1 mb-3">
                     {[...Array(5)].map((_, i) => (
@@ -357,68 +365,54 @@ export const CAWebsite: React.FC = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12">
+      <section id="contact" className="py-12 md:py-20 bg-gray-900 text-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
             <div>
-              <h2 className="text-4xl font-bold mb-6">Get in Touch</h2>
-              <p className="text-gray-300 text-lg mb-8">
-                Ready to take control of your finances? Contact us today for a consultation.
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">Get in Touch</h2>
+              <p className="text-gray-300 text-sm sm:text-base mb-6">
+                Ready to take control of your finances? Contact us today.
               </p>
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <MapPin className="text-blue-400 flex-shrink-0 mt-1" size={24} />
-                  <div>
-                    <p className="font-semibold">Address</p>
-                    <p className="text-gray-300">{FIRM.address}</p>
-                  </div>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <MapPin className="text-blue-400 flex-shrink-0" size={18} />
+                  <p className="text-gray-300 text-sm">{FIRM.address}</p>
                 </div>
-                <div className="flex items-start gap-4">
-                  <Phone className="text-blue-400 flex-shrink-0 mt-1" size={24} />
-                  <div>
-                    <p className="font-semibold">Phone</p>
-                    <a href={`tel:${FIRM.phone}`} className="text-gray-300 hover:text-blue-400 transition">
-                      {FIRM.phone}
-                    </a>
-                  </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="text-blue-400 flex-shrink-0" size={18} />
+                  <a href={`tel:${FIRM.phone}`} className="text-gray-300 hover:text-blue-400 transition text-sm">
+                    {FIRM.phone}
+                  </a>
                 </div>
-                <div className="flex items-start gap-4">
-                  <Mail className="text-blue-400 flex-shrink-0 mt-1" size={24} />
-                  <div>
-                    <p className="font-semibold">Email</p>
-                    <a href={`mailto:${FIRM.email}`} className="text-gray-300 hover:text-blue-400 transition">
-                      {FIRM.email}
-                    </a>
-                  </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="text-blue-400 flex-shrink-0" size={18} />
+                  <a href={`mailto:${FIRM.email}`} className="text-gray-300 hover:text-blue-400 transition text-sm">
+                    {FIRM.email}
+                  </a>
                 </div>
               </div>
             </div>
-            <div className="bg-white text-gray-900 rounded-xl p-8">
-              <h3 className="text-2xl font-bold mb-6">Quick Inquiry</h3>
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            <div className="bg-white text-gray-900 rounded-xl p-5 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-bold mb-4">Quick Inquiry</h3>
+              <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
                 <input
                   type="text"
                   placeholder="Your Name"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                />
-                <input
-                  type="email"
-                  placeholder="Your Email"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
                 <input
                   type="tel"
                   placeholder="Your Phone"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
                 <textarea
                   placeholder="Your Message"
-                  rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  rows={2}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 ></textarea>
                 <button
                   type="submit"
-                  className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
+                  className="w-full py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold text-sm"
                 >
                   Send Message
                 </button>
@@ -429,7 +423,7 @@ export const CAWebsite: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black text-gray-400 py-8">
+      <footer className="bg-black text-gray-400 py-6 md:py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p>&copy; {new Date().getFullYear()} {FIRM.name}. All rights reserved.</p>
           <p className="mt-2 text-sm">Powered by DocManager</p>
@@ -445,6 +439,17 @@ export const CAWebsite: React.FC = () => {
           animation: slide-slow 20s linear infinite;
         }
         .animate-slide-slow:hover {
+          animation-play-state: paused;
+        }
+
+        @keyframes scroll-testimonials {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-scroll-testimonials {
+          animation: scroll-testimonials 30s linear infinite;
+        }
+        .animate-scroll-testimonials:hover {
           animation-play-state: paused;
         }
       `}</style>
