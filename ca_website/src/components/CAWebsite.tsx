@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Building2, Mail, Phone, MapPin, ChevronRight,
+  Building2, Mail, Phone, MapPin,
   CheckCircle, Users, TrendingUp, FileText,
   Factory, ShoppingBag, Home as HomeIcon, Briefcase, Star
 } from 'lucide-react';
@@ -11,7 +11,7 @@ const FIRM = {
   photo: 'https://www.spmlindia.com/resource/Image/Lokesh.jpg',
   address: 'Nanded, Maharashtra, India',
   phone: '+91 98901 54945',
-  email: 'ca.lokesh.dagdiya@gmail.com',
+  email: 'lokeshdagdiya@gmail.com',
   website: 'https://ca-lokesh-dagdiya.vercel.app',
 };
 
@@ -139,23 +139,23 @@ export const CAWebsite: React.FC = () => {
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
             <div className="mb-8">
-              <h1 className="text-6xl md:text-8xl font-extrabold mb-4 tracking-wide text-white drop-shadow-2xl" style={{letterSpacing: '0.05em'}}>
+              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-3 md:mb-4 tracking-wide text-white drop-shadow-2xl leading-tight">
                 DAGDIYA ASSOCIATES
               </h1>
-              <p className="text-3xl md:text-4xl font-semibold text-blue-50 tracking-wide drop-shadow-lg">
+              <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-blue-50 tracking-wide drop-shadow-lg">
                 Your Partner in Financial Excellence
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <a
                 href="#contact"
-                className="px-8 py-4 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition font-bold text-lg shadow-xl flex items-center justify-center gap-2"
+                className="px-6 py-3 sm:px-8 sm:py-4 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition font-bold text-base sm:text-lg shadow-xl flex items-center justify-center gap-2"
               >
                 Get in Touch
               </a>
               <a
                 href="#services"
-                className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg hover:bg-white/10 transition font-bold text-lg flex items-center justify-center gap-2"
+                className="px-6 py-3 sm:px-8 sm:py-4 bg-transparent border-2 border-white text-white rounded-lg hover:bg-white/10 transition font-bold text-base sm:text-lg flex items-center justify-center gap-2"
               >
                 Our Services
               </a>
@@ -165,7 +165,7 @@ export const CAWebsite: React.FC = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-gray-50">
+      <section id="about" className="py-16 md:py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1">
@@ -186,33 +186,36 @@ export const CAWebsite: React.FC = () => {
                   Our deep understanding of evolving tax regulations, combined with personalized attention to each client's unique needs, ensures your business stays compliant, competitive, and financially sound. From startups to established enterprises, we've been there through every milestone.
                 </p>
               </div>
-              <div className="grid sm:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-green-500">
-                  <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                    <CheckCircle className="text-green-600" size={28} />
+              {/* Mobile: Horizontal scroll carousel, Desktop: Grid */}
+              <div className="overflow-x-auto pb-4 -mx-4 px-4 sm:overflow-visible sm:mx-0 sm:px-0">
+                <div className="flex gap-4 sm:grid sm:grid-cols-3 min-w-max sm:min-w-0">
+                  <div className="bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-green-500 w-72 sm:w-auto flex-shrink-0 sm:flex-shrink">
+                    <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-3">
+                      <CheckCircle className="text-green-600" size={24} />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">Expert Guidance</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      Professional advice backed by years of experience
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Expert Guidance</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Professional advice backed by years of experience and certifications
-                  </p>
-                </div>
-                <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-blue-500">
-                  <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                    <Users className="text-blue-600" size={28} />
+                  <div className="bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-blue-500 w-72 sm:w-auto flex-shrink-0 sm:flex-shrink">
+                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-3">
+                      <Users className="text-blue-600" size={24} />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">Personalized Service</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      Tailored solutions for your business requirements
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Personalized Service</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Tailored solutions for your specific business requirements
-                  </p>
-                </div>
-                <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-indigo-500">
-                  <div className="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center mb-4">
-                    <TrendingUp className="text-indigo-600" size={28} />
+                  <div className="bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-indigo-500 w-72 sm:w-auto flex-shrink-0 sm:flex-shrink">
+                    <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mb-3">
+                      <TrendingUp className="text-indigo-600" size={24} />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">Timely Compliance</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      Never miss a deadline with our proactive approach
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Timely Compliance</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Never miss a deadline with our proactive approach
-                  </p>
                 </div>
               </div>
             </div>
@@ -231,7 +234,7 @@ export const CAWebsite: React.FC = () => {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
+      <section id="services" className="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
         <div className="absolute inset-0 opacity-5">
           <img
             src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=1080&fit=crop&q=80"
@@ -249,23 +252,19 @@ export const CAWebsite: React.FC = () => {
               Comprehensive financial solutions designed to meet all your business needs
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {SERVICES.map((service, idx) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            {SERVICES.map((service) => (
               <div
                 key={service.id}
-                className="bg-white border-2 border-gray-200 rounded-2xl p-6 hover:border-blue-600 hover:shadow-2xl transition-all duration-300 group transform hover:-translate-y-2 cursor-pointer"
-                style={{ animationDelay: `${idx * 100}ms` }}
+                className="bg-white border-2 border-gray-200 rounded-xl p-4 md:p-5 hover:border-blue-600 hover:shadow-xl transition-all duration-300 group cursor-pointer"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center mb-4 group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 group-hover:scale-110">
-                  <FileText className="text-blue-600 group-hover:text-white transition-colors duration-300" size={28} />
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center mb-3 group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300">
+                  <FileText className="text-blue-600 group-hover:text-white transition-colors duration-300" size={20} />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-tight">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed text-sm">{service.description}</p>
-                <div className="mt-4 flex items-center text-blue-600 font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                  Learn More <ChevronRight size={16} className="ml-1" />
-                </div>
+                <p className="text-xs md:text-sm text-gray-600 leading-relaxed line-clamp-3">{service.description}</p>
               </div>
             ))}
           </div>
@@ -311,46 +310,48 @@ export const CAWebsite: React.FC = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-white">
+      <section className="py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Client Testimonials</h2>
             <p className="text-xl text-gray-600">What our clients say about us</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {TESTIMONIALS.map((testimonial, idx) => (
-              <div
-                key={testimonial.id}
-                className="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-blue-600 hover:shadow-2xl transition-all duration-300 group transform hover:-translate-y-2"
-                style={{ animationDelay: `${idx * 100}ms` }}
-              >
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      size={20}
-                      className={`transition-all duration-300 ${
-                        i < testimonial.rating
-                          ? 'text-yellow-400 fill-yellow-400 group-hover:scale-110'
-                          : 'text-gray-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <p className="text-gray-700 italic mb-6 leading-relaxed text-lg">
-                  &ldquo;{testimonial.text}&rdquo;
-                </p>
-                <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
-                    {testimonial.client_name.charAt(0)}
+          {/* Mobile: Horizontal scroll, Desktop: Grid */}
+          <div className="overflow-x-auto pb-4 -mx-4 px-4 md:overflow-visible md:mx-0 md:px-0">
+            <div className="flex gap-6 md:grid md:grid-cols-3 min-w-max md:min-w-0">
+              {TESTIMONIALS.map((testimonial) => (
+                <div
+                  key={testimonial.id}
+                  className="bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-blue-600 hover:shadow-xl transition-all duration-300 w-80 md:w-auto flex-shrink-0 md:flex-shrink"
+                >
+                  <div className="flex gap-1 mb-3">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        size={18}
+                        className={`${
+                          i < testimonial.rating
+                            ? 'text-yellow-400 fill-yellow-400'
+                            : 'text-gray-300'
+                        }`}
+                      />
+                    ))}
                   </div>
-                  <div>
-                    <p className="font-bold text-gray-900">{testimonial.client_name}</p>
-                    <p className="text-sm text-gray-500">Valued Client</p>
+                  <p className="text-gray-700 italic mb-4 leading-relaxed text-sm">
+                    &ldquo;{testimonial.text}&rdquo;
+                  </p>
+                  <div className="flex items-center gap-3 pt-3 border-t border-gray-200">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">
+                      {testimonial.client_name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="font-bold text-gray-900 text-sm">{testimonial.client_name}</p>
+                      <p className="text-xs text-gray-500">Valued Client</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
