@@ -310,6 +310,14 @@ export const ProfessionalCAWebsite: React.FC = () => {
                       <div className="absolute bottom-0 left-0 right-0 p-4">
                         <p className="text-white font-semibold">{item.title}</p>
                       </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Services Section with Background */}
       <section className="py-20 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
