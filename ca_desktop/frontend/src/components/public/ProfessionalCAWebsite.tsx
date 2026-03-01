@@ -38,7 +38,10 @@ interface CAWebsiteData {
 
 export const ProfessionalCAWebsite: React.FC = () => {
   const { caSlug: rawSlug } = useParams<{ caSlug: string }>();
-  const caSlug = rawSlug?.startsWith('ca-') ? rawSlug.substring(3) : rawSlug;
+  // Default to lokesh-dagdiya if no slug provided (for root path)
+  const caSlug = rawSlug 
+    ? (rawSlug.startsWith('ca-') ? rawSlug.substring(3) : rawSlug)
+    : 'lokesh-dagdiya';
   const navigate = useNavigate();
   const [data, setData] = useState<CAWebsiteData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -56,9 +59,7 @@ export const ProfessionalCAWebsite: React.FC = () => {
       }
     };
 
-    if (caSlug) {
-      fetchData();
-    }
+    fetchData();
   }, [caSlug]);
 
   if (loading) {

@@ -27,19 +27,13 @@ function AppRoutes() {
 
     return (
         <Routes>
-            {/* Multi-tenant Public Routes */}
-            <Route path="/:caSlug" element={<ProfessionalCAWebsite />} />
-            <Route path="/:caSlug/login" element={<CAClientLogin />} />
-            <Route path="/:caSlug/reset-password" element={<PasswordReset />} />
-            <Route path="/:caSlug/home" element={userType === 'client' ? <PortalDashboard /> : <Navigate to="/:caSlug/login" />} />
+            {/* Root - Show Lokesh's website by default */}
+            <Route path="/" element={<ProfessionalCAWebsite />} />
 
-            {/* CA Login */}
+            {/* CA Login - Must come before /:caSlug */}
             <Route path="/ca/login" element={<CALogin />} />
 
-            {/* Client Portal Login */}
-            <Route path="/portal/login" element={userType === 'client' ? <Navigate to="/portal" /> : <PortalLogin />} />
-
-            {/* CA Routes */}
+            {/* CA Routes - Must come before /:caSlug */}
             <Route path="/ca" element={userType === 'ca' ? <Layout /> : <Navigate to="/ca/login" />}>
                 <Route index element={<Dashboard />} />
                 <Route path="clients" element={<ClientList />} />
@@ -52,18 +46,22 @@ function AppRoutes() {
                 <Route path="logs" element={<ActivityLogs />} />
             </Route>
 
-            {/* Client Portal Routes */}
+            {/* Client Portal Routes - Must come before /:caSlug */}
+            <Route path="/portal/login" element={userType === 'client' ? <Navigate to="/portal" /> : <PortalLogin />} />
             <Route path="/portal" element={userType === 'client' ? <PortalDashboard /> : <Navigate to="/portal/login" />}>
                 <Route index element={<Navigate to="/portal/documents" />} />
                 <Route path="documents" element={<div>Client Documents View (TBD)</div>} />
                 <Route path="messages" element={<div>Client Messages View (TBD)</div>} />
             </Route>
 
-            {/* Legacy Public Routes */}
+            {/* Legacy Public Routes - Must come before /:caSlug */}
             <Route path="/site/:username" element={<PublicWebsite />} />
 
-            {/* Fallback - Default to Lokesh's website */}
-            <Route path="/" element={<Navigate to="/ca-lokesh-dagdiya" />} />
+            {/* Multi-tenant Public Routes - These must come LAST */}
+            <Route path="/:caSlug" element={<ProfessionalCAWebsite />} />
+            <Route path="/:caSlug/login" element={<CAClientLogin />} />
+            <Route path="/:caSlug/reset-password" element={<PasswordReset />} />
+            <Route path="/:caSlug/home" element={userType === 'client' ? <PortalDashboard /> : <Navigate to="/:caSlug/login" />} />
         </Routes>
     )
 }
