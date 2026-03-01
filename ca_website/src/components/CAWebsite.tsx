@@ -9,7 +9,7 @@ import {
 const FIRM = {
   name: 'Dagdiya Associates',
   photo: 'https://www.spmlindia.com/resource/Image/Lokesh.jpg',
-  address: 'Nagpur, Maharashtra, India',
+  address: 'Nanded, Maharashtra, India',
   phone: '+91 98901 54945',
   email: 'ca.lokesh.dagdiya@gmail.com',
   website: 'https://ca-lokesh-dagdiya.vercel.app',
