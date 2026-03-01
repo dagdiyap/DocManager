@@ -97,18 +97,15 @@ export const CAWebsite: React.FC = () => {
               </div>
               <span className="text-xl font-bold text-gray-900">{FIRM.name}</span>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               <a href="#services" className="hidden sm:inline text-gray-700 hover:text-blue-600 transition font-medium">
                 Services
               </a>
-              <a href="#contact" className="text-gray-700 hover:text-blue-600 transition font-medium">
-                Contact
+              <a href="#about" className="hidden sm:inline text-gray-700 hover:text-blue-600 transition font-medium">
+                About
               </a>
-              <a
-                href={`tel:${FIRM.phone}`}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold text-sm"
-              >
-                Call Us
+              <a href="#contact" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold text-sm">
+                Contact Us
               </a>
             </div>
           </div>
@@ -141,30 +138,26 @@ export const CAWebsite: React.FC = () => {
 
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="mb-6">
-              <h1 className="text-6xl md:text-7xl font-bold mb-2 tracking-tight text-white drop-shadow-lg">
+            <div className="mb-8">
+              <h1 className="text-6xl md:text-8xl font-extrabold mb-4 tracking-wide text-white drop-shadow-2xl" style={{letterSpacing: '0.05em'}}>
                 DAGDIYA ASSOCIATES
               </h1>
-              <p className="text-2xl md:text-3xl font-light text-blue-100 tracking-wide">
+              <p className="text-3xl md:text-4xl font-semibold text-blue-50 tracking-wide drop-shadow-lg">
                 Your Partner in Financial Excellence
               </p>
             </div>
-            <p className="text-lg md:text-xl text-blue-50 mb-8 leading-relaxed max-w-3xl mx-auto">
-              Serving businesses with integrity and expertise for over 47 years. Your trusted advisors for comprehensive financial solutions.
-            </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href={`tel:${FIRM.phone}`}
+                href="#contact"
                 className="px-8 py-4 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition font-bold text-lg shadow-xl flex items-center justify-center gap-2"
               >
-                <Phone size={20} />
-                Call Now
+                Get in Touch
               </a>
               <a
-                href="#contact"
+                href="#services"
                 className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg hover:bg-white/10 transition font-bold text-lg flex items-center justify-center gap-2"
               >
-                Get in Touch
+                Our Services
               </a>
             </div>
           </div>
@@ -172,49 +165,54 @@ export const CAWebsite: React.FC = () => {
       </section>
 
       {/* About Section */}
-      <section className="py-20 bg-gray-50">
+      <section id="about" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1">
               <div className="inline-block px-4 py-2 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold mb-4">
                 About Us
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                Excellence Built on 47 Years of Trust
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
+                Excellence Built on <span className="text-blue-600">47 Years of Trust</span>
               </h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                Since 1979, we have been the cornerstone of financial excellence for businesses across Maharashtra. Our legacy spans nearly five decades of unwavering commitment to accuracy, compliance, and client success. What started as a vision to provide ethical and professional accounting services has grown into a trusted partnership with hundreds of businesses.
-              </p>
-              <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                We don't just manage numbers—we build lasting relationships. Our deep understanding of evolving tax regulations, combined with personalized attention to each client's unique needs, ensures your business stays compliant, competitive, and financially sound. From startups to established enterprises, we've been there through every milestone.
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3 group">
-                  <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                    <CheckCircle className="text-green-600" size={20} />
+              <div className="space-y-6 mb-8">
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  Since 1979, we have been the cornerstone of financial excellence for businesses across Maharashtra. Our legacy spans nearly five decades of unwavering commitment to accuracy, compliance, and client success.
+                </p>
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  What started as a vision to provide ethical and professional accounting services has grown into a trusted partnership with hundreds of businesses. We don't just manage numbers—we build lasting relationships.
+                </p>
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  Our deep understanding of evolving tax regulations, combined with personalized attention to each client's unique needs, ensures your business stays compliant, competitive, and financially sound. From startups to established enterprises, we've been there through every milestone.
+                </p>
+              </div>
+              <div className="grid sm:grid-cols-3 gap-6">
+                <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-green-500">
+                  <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                    <CheckCircle className="text-green-600" size={28} />
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Expert Guidance</h3>
-                    <p className="text-gray-600">Professional advice backed by years of experience and certifications</p>
-                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Expert Guidance</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Professional advice backed by years of experience and certifications
+                  </p>
                 </div>
-                <div className="flex items-start gap-3 group">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                    <Users className="text-blue-600" size={20} />
+                <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-blue-500">
+                  <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <Users className="text-blue-600" size={28} />
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Personalized Service</h3>
-                    <p className="text-gray-600">Tailored solutions for your specific business requirements</p>
-                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Personalized Service</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Tailored solutions for your specific business requirements
+                  </p>
                 </div>
-                <div className="flex items-start gap-3 group">
-                  <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                    <TrendingUp className="text-purple-600" size={20} />
+                <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-indigo-500">
+                  <div className="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center mb-4">
+                    <TrendingUp className="text-indigo-600" size={28} />
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Timely Compliance</h3>
-                    <p className="text-gray-600">Never miss a deadline with our proactive approach</p>
-                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Timely Compliance</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Never miss a deadline with our proactive approach
+                  </p>
                 </div>
               </div>
             </div>
