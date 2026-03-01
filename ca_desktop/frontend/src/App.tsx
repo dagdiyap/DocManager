@@ -62,8 +62,8 @@ function AppRoutes() {
             {/* Legacy Public Routes */}
             <Route path="/site/:username" element={<PublicWebsite />} />
 
-            {/* Fallback */}
-            <Route path="/" element={<Navigate to="/portal/login" />} />
+            {/* Fallback - Default to Lokesh's website */}
+            <Route path="/" element={<Navigate to="/ca-lokesh-dagdiya" />} />
         </Routes>
     )
 }
