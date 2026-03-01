@@ -31,13 +31,13 @@ def create_download_token(
     expiry_seconds: int = 600,
 ) -> str:
     """Create HMAC-signed download token.
-    
+
     Args:
         client_phone: Client phone number
         file_path: Full file path
         secret_key: HMAC secret key
         expiry_seconds: Token validity in seconds (default: 10 minutes)
-        
+
     Returns:
         Base64-encoded token string
     """
@@ -51,9 +51,7 @@ def create_download_token(
     payload = f"{client_phone}|{file_path}|{expiry.isoformat()}|{nonce}"
 
     # Generate HMAC signature
-    signature = hmac.new(
-        secret_key.encode(), payload.encode(), hashlib.sha256
-    ).hexdigest()
+    signature = hmac.new(secret_key.encode(), payload.encode(), hashlib.sha256).hexdigest()
 
     # Combine payload and signature
     token = f"{payload}|{signature}"
@@ -73,16 +71,16 @@ def verify_download_token(
     expected_file_path: Optional[str] = None,
 ) -> DownloadTokenData:
     """Verify and decode download token.
-    
+
     Args:
         token: Base64-encoded token string
         secret_key: HMAC secret key
         expected_client_phone: Optional client phone to verify
         expected_file_path: Optional file path to verify
-        
+
     Returns:
         DownloadTokenData with decoded information
-        
+
     Raises:
         DownloadTokenError: If token is invalid or expired
     """
@@ -120,8 +118,7 @@ def verify_download_token(
         # Verify client phone if provided
         if expected_client_phone and client_phone != expected_client_phone:
             raise DownloadTokenError(
-                f"Client phone mismatch. Expected: {expected_client_phone}, "
-                f"Got: {client_phone}"
+                f"Client phone mismatch. Expected: {expected_client_phone}, Got: {client_phone}"
             )
 
         # Verify file path if provided
@@ -142,10 +139,10 @@ def verify_download_token(
 
 def is_token_expired(token_data: DownloadTokenData) -> bool:
     """Check if token is expired.
-    
+
     Args:
         token_data: Decoded token data
-        
+
     Returns:
         True if token is expired
     """

@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  license-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: license_manager
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  license-server:
+    build:
+      context: .
+      dockerfile: license_server/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://postgres:password@license-db:5432/license_manager
+      JWT_SECRET: test-secret-key
+      INIT_CA_ID: DEV_TEST_CA
+      INIT_CA_PASSWORD: password
+    ports:
+      - "8000:8000"
+    depends_on:
+      license-db:
+        condition: service_healthy
+
+  ca-desktop-backend:
+    build:
+      context: .
+      dockerfile: ca_desktop/backend/Dockerfile
+    environment:
+      SECRET_KEY: desktop-secret-key
+      LICENSE_SERVER_URL: http://license-server:8000
+      SUPPORT_MODE_ENABLED: "true"
+      DOCUMENTS_ROOT: /app/data/documents
+      SHARED_FILES_ROOT: /app/data/shared
+    ports:
+      - "8443:8443"
+    depends_on:
+      - license-server
+    volumes:
+      - ./ca_desktop/backend/data:/app/data
+
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      LICENSE_SERVER_URL: http://license-server:8000
+      DESKTOP_BACKEND_URL: http://ca-desktop-backend:8443
+    depends_on:
+      - license-server
+      - ca-desktop-backend
+    volumes:
+      - .:/app
+    command: [ "pytest", "license_server/tests", "ca_desktop/backend/tests", "-v" ]
+
+networks:
+  default:
+    name: docmanager-test-net

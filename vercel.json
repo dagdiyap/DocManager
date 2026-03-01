@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "ca_desktop/frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/ca-[^/]+",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/ca-[^/]+/login",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/ca-[^/]+/home",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "http://localhost:8443/api/:path*"
+    }
+  ]
+}

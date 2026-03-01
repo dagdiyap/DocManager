@@ -19,13 +19,13 @@ class PhoneNumberError(ValidationError):
 
 def validate_phone_number(phone: str) -> str:
     """Validate and normalize phone number.
-    
+
     Args:
         phone: Phone number string
-        
+
     Returns:
         Normalized phone number (digits only)
-        
+
     Raises:
         PhoneNumberError: If phone number is invalid
     """
@@ -34,9 +34,7 @@ def validate_phone_number(phone: str) -> str:
 
     # Must be 10-15 digits
     if len(digits) < 10 or len(digits) > 15:
-        raise PhoneNumberError(
-            f"Phone number must be 10-15 digits, got {len(digits)} digits"
-        )
+        raise PhoneNumberError(f"Phone number must be 10-15 digits, got {len(digits)} digits")
 
     # Must start with valid country code or digit
     if not digits[0].isdigit():
@@ -47,13 +45,13 @@ def validate_phone_number(phone: str) -> str:
 
 def validate_year(year: str) -> str:
     """Validate year format.
-    
+
     Args:
         year: Year string (e.g., '2024')
-        
+
     Returns:
         Validated year string
-        
+
     Raises:
         ValidationError: If year is invalid
     """
@@ -71,20 +69,20 @@ def validate_year(year: str) -> str:
 
 def validate_document_type(doc_type: str) -> str:
     """Validate document type.
-    
+
     Args:
         doc_type: Document type string
-        
+
     Returns:
         Validated document type
-        
+
     Raises:
         ValidationError: If document type is invalid
     """
     # Must be alphanumeric with underscores, no spaces
-    if not re.match(r"^[A-Z0-9_]+$", doc_type):
+    if not re.match(r"^[a-zA-Z0-9_]+$", doc_type):
         raise ValidationError(
-            f"Document type must be uppercase alphanumeric with underscores, got: {doc_type}"
+            f"Document type must be alphanumeric with underscores, got: {doc_type}"
         )
 
     # Max 50 characters
@@ -96,14 +94,14 @@ def validate_document_type(doc_type: str) -> str:
 
 def validate_file_path(file_path: str, allowed_extensions: Optional[list] = None) -> Path:
     """Validate file path and check for path traversal.
-    
+
     Args:
         file_path: File path string
         allowed_extensions: Optional list of allowed file extensions (e.g., ['.pdf', '.jpg'])
-        
+
     Returns:
         Validated Path object
-        
+
     Raises:
         ValidationError: If path is invalid or contains traversal attempts
     """
@@ -128,43 +126,62 @@ def validate_file_path(file_path: str, allowed_extensions: Optional[list] = None
     return path
 
 
+_WINDOWS_RESERVED_NAMES = frozenset({
+    "CON", "PRN", "AUX", "NUL",
+    "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+    "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
+})
+
+
 def sanitize_filename(filename: str) -> str:
     """Sanitize filename by removing/replacing dangerous characters.
-    
+
+    Handles both Windows and macOS/Linux constraints:
+    - Removes characters invalid on Windows (\\/:*?"<>|)
+    - Rejects Windows reserved names (CON, PRN, NUL, etc.)
+    - Strips leading/trailing dots and spaces (Windows restriction)
+
     Args:
         filename: Original filename
-        
+
     Returns:
         Sanitized filename
     """
-    # Remove/replace dangerous characters
-    # Keep only alphanumeric, dash, underscore, dot
-    sanitized = re.sub(r"[^\w\s\-.]", "", filename)
+    # Remove characters invalid on Windows: \ / : * ? " < > |
+    sanitized = re.sub(r'[\\/:*?"<>|]', "", filename)
+
+    # Keep only alphanumeric, dash, underscore, dot, space
+    sanitized = re.sub(r"[^\w\s\-.]", "", sanitized)
 
     # Replace multiple spaces with single space
     sanitized = re.sub(r"\s+", " ", sanitized)
 
-    # Remove leading/trailing spaces
-    sanitized = sanitized.strip()
+    # Remove leading/trailing spaces and dots (Windows restriction)
+    sanitized = sanitized.strip().strip(".")
 
     # If empty after sanitization, use default
     if not sanitized:
         sanitized = "file"
+
+    # Check for Windows reserved names (e.g. CON, CON.txt)
+    stem = Path(sanitized).stem.upper()
+    if stem in _WINDOWS_RESERVED_NAMES:
+        sanitized = f"_{sanitized}"
 
     return sanitized
 
 
 def validate_folder_structure(phone: str, year: str, doc_type: str) -> tuple:
     """Validate complete folder structure components.
-    
+
     Args:
         phone: Phone number
         year: Year string
         doc_type: Document type
-        
+
     Returns:
         Tuple of (validated_phone, validated_year, validated_doc_type)
-        
+
     Raises:
         ValidationError: If any component is invalid
     """
@@ -177,11 +194,11 @@ def validate_folder_structure(phone: str, year: str, doc_type: str) -> tuple:
 
 def is_safe_path(base_path: Path, target_path: Path) -> bool:
     """Check if target path is within base path (no traversal).
-    
+
     Args:
         base_path: Base directory path
         target_path: Target file/directory path
-        
+
     Returns:
         True if target is within base, False otherwise
     """

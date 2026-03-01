@@ -1,0 +1,36 @@
+
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ca_desktop/backend/Dockerfile
+    ports:
+      - "8443:8443"
+    environment:
+      - CA_DATABASE_URL=sqlite:///./data/ca_desktop.db
+      - SECRET_KEY=your_secret_key_change_in_production_min_32_chars
+      - ENVIRONMENT=production
+    volumes:
+      - backend_data:/app/ca_desktop/backend/data
+      - backend_docs:/app/ca_desktop/backend/documents
+      - backend_shared:/app/ca_desktop/backend/shared_files
+      - backend_keys:/app/ca_desktop/backend/keys
+      - backend_logs:/app/ca_desktop/backend/logs
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ca_desktop/frontend/Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  backend_data:
+  backend_docs:
+  backend_shared:
+  backend_keys:
+  backend_logs:

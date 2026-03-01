@@ -7,14 +7,14 @@ name = "ca-shared"
 version = "0.1.0"
 description = "Shared utilities for CA Document Manager"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.9"
 authors = [
     {name = "Your Name", email = "your.email@example.com"}
 ]
 dependencies = [
     "cryptography==41.0.7",
     "pyjwt==2.8.0",
-    "pydantic==2.5.0",
+    "pydantic==2.5.2",
 ]
 
 [project.optional-dependencies]
@@ -31,14 +31,18 @@ where = ["."]
 
 [tool.black]
 line-length = 100
-target-version = ['py311']
+target-version = ['py39']
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py39"
+
+[tool.ruff.lint]
+# Add rules here if needed
+ignore = []
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.9"
 warn_return_any = true
 warn_unused_configs = true
 

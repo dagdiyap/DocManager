@@ -22,14 +22,14 @@ def create_license_token(
     additional_claims: Optional[Dict[str, Any]] = None,
 ) -> str:
     """Create a signed license token.
-    
+
     Args:
         ca_id: CA identifier
         device_id: Device fingerprint hash
         private_key_pem: RSA private key in PEM format
         expiry_days: Number of days until token expires
         additional_claims: Optional additional JWT claims
-        
+
     Returns:
         Signed JWT token string
     """
@@ -63,23 +63,21 @@ def verify_license_token(
     token: str, public_key_pem: bytes, expected_device_id: Optional[str] = None
 ) -> Dict[str, Any]:
     """Verify and decode a license token.
-    
+
     Args:
         token: JWT token string
         public_key_pem: RSA public key in PEM format
         expected_device_id: Optional device ID to verify against
-        
+
     Returns:
         Decoded token payload
-        
+
     Raises:
         TokenValidationError: If token is invalid or expired
     """
     try:
         # Load public key
-        public_key = serialization.load_pem_public_key(
-            public_key_pem, backend=default_backend()
-        )
+        public_key = serialization.load_pem_public_key(public_key_pem, backend=default_backend())
 
         # Decode and verify token
         payload = jwt.decode(token, public_key, algorithms=["RS256"])
@@ -96,7 +94,7 @@ def verify_license_token(
         if datetime.utcnow() > expires_at:
             raise TokenValidationError(f"Token expired at {expires_at}")
 
-        return payload
+        return dict(payload)
 
     except jwt.ExpiredSignatureError as e:
         raise TokenValidationError("Token has expired") from e
@@ -108,25 +106,25 @@ def verify_license_token(
 
 def decode_token_without_verification(token: str) -> Dict[str, Any]:
     """Decode token without verifying signature (for debugging).
-    
+
     Args:
         token: JWT token string
-        
+
     Returns:
         Decoded token payload
-        
+
     Warning:
         This does not verify the token signature! Only use for debugging.
     """
-    return jwt.decode(token, options={"verify_signature": False})
+    return dict(jwt.decode(token, options={"verify_signature": False}))
 
 
 def get_token_expiry(token: str) -> datetime:
     """Get token expiration time without full verification.
-    
+
     Args:
         token: JWT token string
-        
+
     Returns:
         Token expiration datetime
     """
@@ -136,10 +134,10 @@ def get_token_expiry(token: str) -> datetime:
 
 def is_token_expired(token: str) -> bool:
     """Check if token is expired without full verification.
-    
+
     Args:
         token: JWT token string
-        
+
     Returns:
         True if token is expired
     """

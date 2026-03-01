@@ -1,29 +1,37 @@
-FROM python:3.11-slim
+# Build stage
+FROM python:3.12-slim as builder
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY license_server/requirements.txt .
+RUN pip install --no-cache-dir --user -r requirements.txt
+
+# Final stage
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    curl \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
-COPY pyproject.toml .
+COPY --from=builder /root/.local /root/.local
+# Copy specific folders from root context
+COPY license_server ./license_server/
+COPY shared ./shared/
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -e .
+ENV PATH=/root/.local/bin:$PATH
+ENV PYTHONPATH=/app
 
-# Copy application code
-COPY src/ ./src/
-COPY alembic/ ./alembic/
-COPY alembic.ini .
+WORKDIR /app/license_server
 
-# Create directories
-RUN mkdir -p /app/keys /app/logs
-
-# Expose ports
-EXPOSE 8000 8001
-
-# Run migrations and start server
+# Script to wait for DB and run migrations
 CMD alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 8000

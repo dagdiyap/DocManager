@@ -14,7 +14,7 @@ class RSAKeyManager:
 
     def __init__(self, key_dir: Path) -> None:
         """Initialize key manager.
-        
+
         Args:
             key_dir: Directory to store keys
         """
@@ -25,10 +25,10 @@ class RSAKeyManager:
 
     def generate_keypair(self, key_size: int = 2048) -> Tuple[bytes, bytes]:
         """Generate RSA key pair and save to files.
-        
+
         Args:
             key_size: Size of the key in bits (default: 2048)
-            
+
         Returns:
             Tuple of (private_key_pem, public_key_pem)
         """
@@ -63,10 +63,10 @@ class RSAKeyManager:
 
     def load_private_key(self) -> bytes:
         """Load private key from file.
-        
+
         Returns:
             Private key in PEM format
-            
+
         Raises:
             FileNotFoundError: If private key file doesn't exist
         """
@@ -76,10 +76,10 @@ class RSAKeyManager:
 
     def load_public_key(self) -> bytes:
         """Load public key from file.
-        
+
         Returns:
             Public key in PEM format
-            
+
         Raises:
             FileNotFoundError: If public key file doesn't exist
         """
@@ -89,7 +89,7 @@ class RSAKeyManager:
 
     def keys_exist(self) -> bool:
         """Check if both keys exist.
-        
+
         Returns:
             True if both private and public keys exist
         """
@@ -98,10 +98,10 @@ class RSAKeyManager:
 
 def generate_rsa_keypair(key_size: int = 2048) -> Tuple[bytes, bytes]:
     """Generate RSA key pair without saving to files.
-    
+
     Args:
         key_size: Size of the key in bits (default: 2048)
-        
+
     Returns:
         Tuple of (private_key_pem, public_key_pem)
     """
@@ -126,13 +126,13 @@ def generate_rsa_keypair(key_size: int = 2048) -> Tuple[bytes, bytes]:
 
 def load_private_key(key_path: Path) -> bytes:
     """Load private key from file path.
-    
+
     Args:
         key_path: Path to private key file
-        
+
     Returns:
         Private key in PEM format
-        
+
     Raises:
         FileNotFoundError: If key file doesn't exist
     """
@@ -144,13 +144,13 @@ def load_private_key(key_path: Path) -> bytes:
 
 def load_public_key(key_path: Path) -> bytes:
     """Load public key from file path.
-    
+
     Args:
         key_path: Path to public key file
-        
+
     Returns:
         Public key in PEM format
-        
+
     Raises:
         FileNotFoundError: If key file doesn't exist
     """

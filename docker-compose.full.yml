@@ -1,0 +1,104 @@
+
+version: '3.8'
+
+services:
+  # ==========================================
+  # License Server Ecosystem
+  # ==========================================
+  
+  ls-db:
+    image: postgres:15-alpine
+    container_name: docmanager_ls_db
+    environment:
+      POSTGRES_DB: license_server
+      POSTGRES_USER: license_admin
+      POSTGRES_PASSWORD: change_me_in_production
+    ports:
+      - "5432:5432"
+    volumes:
+      - ls_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U license_admin -d license_server"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - docmanager_net
+
+  ls-backend:
+    build:
+      context: .
+      dockerfile: license_server/Dockerfile
+    container_name: docmanager_ls_backend
+    depends_on:
+      ls-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://license_admin:change_me_in_production@ls-db:5432/license_server
+      SECRET_KEY: dev_secret_key_change_in_production
+      ENVIRONMENT: production
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./license_server/keys:/app/license_server/keys
+      - ./logs/license_server:/app/license_server/logs
+    networks:
+      - docmanager_net
+
+  ls-ui:
+    build:
+      context: .
+      dockerfile: license_server/ui/Dockerfile
+    container_name: docmanager_ls_ui
+    ports:
+      - "5173:80"
+    depends_on:
+      - ls-backend
+    networks:
+      - docmanager_net
+
+  # ==========================================
+  # CA Desktop Ecosystem
+  # ==========================================
+
+  ca-backend:
+    build:
+      context: .
+      dockerfile: ca_desktop/backend/Dockerfile
+    container_name: docmanager_ca_backend
+    ports:
+      - "8443:8443"
+    environment:
+      CA_DATABASE_URL: sqlite:///./data/ca_desktop.db
+      SECRET_KEY: dev_secret_key_change_in_production
+      ENVIRONMENT: production
+      LICENSE_SERVER_URL: http://ls-backend:8000
+    volumes:
+      - ca_backend_data:/app/ca_desktop/backend/data
+      - ca_backend_docs:/app/ca_desktop/backend/documents
+      - ca_backend_shared:/app/ca_desktop/backend/shared_files
+      - ./logs/ca_desktop:/app/ca_desktop/backend/logs
+    networks:
+      - docmanager_net
+
+  ca-ui:
+    build:
+      context: .
+      dockerfile: ca_desktop/frontend/Dockerfile
+    container_name: docmanager_ca_ui
+    ports:
+      - "5174:80"
+    depends_on:
+      - ca-backend
+    networks:
+      - docmanager_net
+
+volumes:
+  ls_postgres_data:
+  ca_backend_data:
+  ca_backend_docs:
+  ca_backend_shared:
+
+networks:
+  docmanager_net:
+    driver: bridge

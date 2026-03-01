@@ -1,0 +1,27 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    curl \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install all requirements for testing
+COPY license_server/requirements.txt ./license_server_reqs.txt
+COPY ca_desktop/backend/requirements.txt ./ca_backend_reqs.txt
+COPY shared ./shared
+
+RUN pip install --no-cache-dir \
+    -r ./license_server_reqs.txt \
+    -r ./ca_backend_reqs.txt \
+    -e ./shared/
+
+# Set working directory back to root
+WORKDIR /app
+
+ENV PYTHONPATH=/app
+
+CMD ["pytest", "license_server/tests", "ca_desktop/backend/tests", "-v"]

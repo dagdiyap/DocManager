@@ -31,16 +31,19 @@ ALLOWED_FILE_EXTENSIONS = [
     ".jpg",
     ".jpeg",
     ".png",
+    ".gif",
+    ".webp",
     ".xlsx",
     ".xls",
     ".doc",
     ".docx",
+    ".txt",
     ".zip",
 ]
 
 # Token settings
 TOKEN_EXPIRY_SECONDS = 600  # 10 minutes
-LICENSE_TOKEN_EXPIRY_DAYS = 30  # 30 days default
+LICENSE_TOKEN_EXPIRY_DAYS = 90  # 30 days default
 DEFAULT_LICENSE_DAYS = 30
 MAX_LICENSE_DAYS = 365
 MIN_LICENSE_DAYS = 1
