@@ -3,10 +3,13 @@
 from contextlib import asynccontextmanager
 from datetime import datetime
 
+from pathlib import Path
+
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from shared.utils.logging import get_logger, setup_logging
 
 from ca_desktop.backend.src import config, database
@@ -149,6 +152,29 @@ app.include_router(ca_profile.router, prefix="/api/v1")
 app.include_router(public.router, prefix="/api/v1")
 
 
-@app.get("/", tags=["General"])
-def read_root():
-    return {"status": "CA Desktop Backend Online"}
+# Mount Frontend Static Files (Client Portal UI)
+# Determine frontend dist path relative to this file
+frontend_dist = Path(__file__).parent.parent.parent / "frontend" / "dist"
+
+if frontend_dist.exists():
+    # Mount static assets (JS, CSS, images)
+    app.mount("/assets", StaticFiles(directory=str(frontend_dist / "assets")), name="assets")
+    
+    # Serve index.html for all non-API routes (SPA routing)
+    from fastapi.responses import FileResponse
+    
+    @app.get("/{full_path:path}", tags=["Frontend"])
+    async def serve_frontend(full_path: str):
+        """Serve frontend for all non-API routes (SPA catch-all)."""
+        # If requesting a specific file that exists, serve it
+        file_path = frontend_dist / full_path
+        if file_path.is_file():
+            return FileResponse(file_path)
+        # Otherwise serve index.html for SPA routing
+        return FileResponse(frontend_dist / "index.html")
+else:
+    logger.warning(f"Frontend dist folder not found at {frontend_dist}")
+    
+    @app.get("/", tags=["General"])
+    def read_root():
+        return {"status": "CA Desktop Backend Online", "note": "Frontend not built"}

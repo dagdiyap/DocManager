@@ -8,7 +8,7 @@ import {
 // All data hardcoded — no backend API dependency
 const FIRM = {
   name: 'Dagdiya Associates',
-  photo: 'https://www.spmlindia.com/resource/Image/Lokesh.jpg',
+  photo: '/images/lokesh-dagdiya.jpg',
   address: 'Nanded, Maharashtra, India',
   phone: '+91 98901 54945',
   email: 'lokeshdagdiya@gmail.com',
@@ -173,8 +173,20 @@ export const CAWebsite: React.FC = () => {
       {/* About Section */}
       <section id="about" className="py-12 md:py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-            <div className="order-2 md:order-1">
+          <div className="flex flex-col md:grid md:grid-cols-2 gap-6 md:gap-12">
+            {/* Image first on mobile, second on desktop */}
+            <div className="md:order-2">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl w-full max-w-sm mx-auto md:max-w-full">
+                <img
+                  src={FIRM.photo}
+                  alt="CA Lokesh Dagdiya"
+                  className="w-full h-auto object-cover object-top"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              </div>
+            </div>
+            {/* Text content */}
+            <div className="md:order-1">
               <div className="inline-block px-3 py-1.5 bg-blue-100 text-blue-600 rounded-full text-xs sm:text-sm font-semibold mb-3">
                 About Us
               </div>
@@ -190,10 +202,56 @@ export const CAWebsite: React.FC = () => {
                   We don't just manage numbers—we build lasting relationships. Our deep understanding of evolving tax regulations ensures your business stays compliant, competitive, and financially sound.
                 </p>
               </div>
-              {/* Mobile: Horizontal scroll carousel, Desktop: Grid */}
-              <div className="overflow-x-auto pb-4 -mx-4 px-4 sm:overflow-visible sm:mx-0 sm:px-0">
-                <div className="flex gap-4 sm:grid sm:grid-cols-3 min-w-max sm:min-w-0">
-                  <div className="bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-green-500 w-72 sm:w-auto flex-shrink-0 sm:flex-shrink">
+              {/* Auto-scrolling feature cards carousel */}
+              {/* Mobile: animated carousel with duplicates, Desktop: static grid */}
+              <div className="overflow-hidden relative sm:overflow-visible">
+                {/* Mobile view - animated carousel */}
+                <div className="flex gap-4 animate-scroll-features sm:hidden">
+                  {/* Duplicate 3 times for seamless infinite loop on mobile */}
+                  {[...Array(3)].map((_, setIdx) => (
+                    <React.Fragment key={setIdx}>
+                      <div className="bg-white rounded-xl p-3 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-green-500 w-[180px] flex-shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center mb-2">
+                          <CheckCircle className="text-green-600" size={18} />
+                        </div>
+                        <h3 className="text-sm font-bold text-gray-900 mb-1">Expert Guidance</h3>
+                        <p className="text-xs text-gray-600 leading-snug">
+                          Professional advice backed by experience
+                        </p>
+                      </div>
+                      <div className="bg-white rounded-xl p-3 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-blue-500 w-[180px] flex-shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center mb-2">
+                          <Users className="text-blue-600" size={18} />
+                        </div>
+                        <h3 className="text-sm font-bold text-gray-900 mb-1">Personalized Service</h3>
+                        <p className="text-xs text-gray-600 leading-snug">
+                          Tailored solutions for your business
+                        </p>
+                      </div>
+                      <div className="bg-white rounded-xl p-3 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-indigo-500 w-[180px] flex-shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center mb-2">
+                          <TrendingUp className="text-indigo-600" size={18} />
+                        </div>
+                        <h3 className="text-sm font-bold text-gray-900 mb-1">Timely Compliance</h3>
+                        <p className="text-xs text-gray-600 leading-snug">
+                          Never miss a deadline with us
+                        </p>
+                      </div>
+                      <div className="bg-white rounded-xl p-3 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-orange-500 w-[180px] flex-shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center mb-2">
+                          <Star className="text-orange-600" size={18} />
+                        </div>
+                        <h3 className="text-sm font-bold text-gray-900 mb-1">Proven Results</h3>
+                        <p className="text-xs text-gray-600 leading-snug">
+                          Decades of success stories
+                        </p>
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </div>
+                {/* Desktop view - static grid, no duplicates */}
+                <div className="hidden sm:grid sm:grid-cols-3 gap-6">
+                  <div className="bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-green-500">
                     <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-3">
                       <CheckCircle className="text-green-600" size={24} />
                     </div>
@@ -202,7 +260,7 @@ export const CAWebsite: React.FC = () => {
                       Professional advice backed by years of experience
                     </p>
                   </div>
-                  <div className="bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-blue-500 w-72 sm:w-auto flex-shrink-0 sm:flex-shrink">
+                  <div className="bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-blue-500">
                     <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-3">
                       <Users className="text-blue-600" size={24} />
                     </div>
@@ -211,7 +269,7 @@ export const CAWebsite: React.FC = () => {
                       Tailored solutions for your business requirements
                     </p>
                   </div>
-                  <div className="bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-indigo-500 w-72 sm:w-auto flex-shrink-0 sm:flex-shrink">
+                  <div className="bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-indigo-500">
                     <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mb-3">
                       <TrendingUp className="text-indigo-600" size={24} />
                     </div>
@@ -221,18 +279,6 @@ export const CAWebsite: React.FC = () => {
                     </p>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="order-1 md:order-2 relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl mx-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
-                <div className="aspect-[3/4] md:aspect-[4/5]">
-                  <img
-                    src={FIRM.photo}
-                    alt="CA Lokesh Dagdiya"
-                    className="w-full h-full object-cover object-top"
-                  />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
             </div>
           </div>
@@ -326,8 +372,8 @@ export const CAWebsite: React.FC = () => {
           {/* Auto-scrolling horizontal carousel */}
           <div className="overflow-hidden relative">
             <div className="flex gap-6 animate-scroll-testimonials">
-              {/* Duplicate testimonials for seamless infinite loop */}
-              {[...TESTIMONIALS, ...TESTIMONIALS].map((testimonial, idx) => (
+              {/* Duplicate testimonials 3 times for seamless infinite loop */}
+              {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((testimonial, idx) => (
                 <div
                   key={`${testimonial.id}-${idx}`}
                   className="bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-blue-600 hover:shadow-xl transition-all duration-300 w-80 flex-shrink-0"
@@ -444,12 +490,23 @@ export const CAWebsite: React.FC = () => {
 
         @keyframes scroll-testimonials {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          100% { transform: translateX(-33.333%); }
         }
         .animate-scroll-testimonials {
-          animation: scroll-testimonials 30s linear infinite;
+          animation: scroll-testimonials 20s linear infinite;
         }
         .animate-scroll-testimonials:hover {
+          animation-play-state: paused;
+        }
+        
+        @keyframes scroll-features {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-33.333%); }
+        }
+        .animate-scroll-features {
+          animation: scroll-features 6s linear infinite;
+        }
+        .animate-scroll-features:hover {
           animation-play-state: paused;
         }
       `}</style>
