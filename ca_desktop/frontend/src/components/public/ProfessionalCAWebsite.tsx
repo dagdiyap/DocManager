@@ -31,7 +31,7 @@ interface CAWebsiteData {
   testimonials: Array<{
     id: number;
     client_name: string;
-    content: string;
+    text: string;
     rating: number;
   }>;
 }
@@ -156,31 +156,42 @@ export const ProfessionalCAWebsite: React.FC = () => {
         </div>
       </nav>
 
-      {/* Hero Section with Dynamic Background */}
-      <section className="relative bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 text-white py-20 overflow-hidden">
+      {/* Hero Section with Moving Banner Images */}
+      <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white py-24 overflow-hidden">
+        {/* Animated Background Carousel */}
         <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=1920&h=1080&fit=crop&q=80"
-            alt="Financial Excellence"
-            className="w-full h-full object-cover opacity-20"
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 via-indigo-700/90 to-purple-800/90"></div>
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-          <div className="absolute top-0 right-0 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-          <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 via-blue-800/90 to-indigo-900/95 z-10"></div>
+          <div className="animate-slide-slow absolute inset-0 flex">
+            <img
+              src="https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=1920&h=1080&fit=crop&q=80"
+              alt="Professional Accounting"
+              className="w-full h-full object-cover flex-shrink-0"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=1080&fit=crop&q=80"
+              alt="Financial Analysis"
+              className="w-full h-full object-cover flex-shrink-0"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&h=1080&fit=crop&q=80"
+              alt="Business Consulting"
+              className="w-full h-full object-cover flex-shrink-0"
+            />
+          </div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Your Trusted Partner in<br />
-              <span className="text-blue-200">Financial Excellence</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-blue-100 mb-8 leading-relaxed">
-              {data.profile?.professional_bio ||
-                `${caName} - Providing expert chartered accountancy services with integrity, professionalism, and personalized attention to your financial needs.`}
+            <div className="mb-6">
+              <h1 className="text-6xl md:text-7xl font-bold mb-2 tracking-tight text-white drop-shadow-lg">
+                DAGDIYA ASSOCIATES
+              </h1>
+              <p className="text-2xl md:text-3xl font-light text-blue-100 tracking-wide">
+                Your Partner in Financial Excellence
+              </p>
+            </div>
+            <p className="text-lg md:text-xl text-blue-50 mb-8 leading-relaxed max-w-3xl mx-auto">
+              Serving businesses with integrity and expertise for over 47 years. Your trusted advisors for comprehensive financial solutions.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
@@ -210,11 +221,13 @@ export const ProfessionalCAWebsite: React.FC = () => {
                 About Us
               </div>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                About {firmName}
+                Excellence Built on 47 Years of Trust
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                {data.profile?.professional_bio ||
-                  'With years of experience in chartered accountancy, we provide comprehensive financial solutions tailored to your unique needs. Our commitment to excellence and client satisfaction sets us apart in the industry.'}
+                Since 1979, we have been the cornerstone of financial excellence for businesses across Maharashtra. Our legacy spans nearly five decades of unwavering commitment to accuracy, compliance, and client success. What started as a vision to provide ethical and professional accounting services has grown into a trusted partnership with hundreds of businesses.
+              </p>
+              <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                We don't just manage numbers—we build lasting relationships. Our deep understanding of evolving tax regulations, combined with personalized attention to each client's unique needs, ensures your business stays compliant, competitive, and financially sound. From startups to established enterprises, we've been there through every milestone.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start gap-3 group">
@@ -361,19 +374,19 @@ export const ProfessionalCAWebsite: React.FC = () => {
         </div>
       </section>
 
-      {/* Industries We Serve with Background */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-5">
+      {/* Industries We Serve with Background Images */}
+      <section className="py-20 bg-gray-900 relative overflow-hidden">
+        <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=1080&fit=crop&q=80"
             alt="Business Background"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-30 blur-sm"
           />
         </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Industries We Serve</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-4xl font-bold text-white mb-4">Industries We Serve</h2>
+            <p className="text-xl text-blue-100 max-w-2xl mx-auto">
               Specialized expertise across diverse sectors
             </p>
           </div>
@@ -383,7 +396,7 @@ export const ProfessionalCAWebsite: React.FC = () => {
               return (
                 <div
                   key={idx}
-                  className="bg-white rounded-2xl p-6 text-center hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 hover:border-blue-600 group transform hover:-translate-y-2 cursor-pointer"
+                  className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 text-center hover:shadow-2xl transition-all duration-300 border-2 border-white/20 hover:border-blue-400 group transform hover:-translate-y-2 cursor-pointer"
                   style={{ animationDelay: `${idx * 50}ms` }}
                 >
                   <div className={`w-16 h-16 ${industry.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
@@ -427,7 +440,7 @@ export const ProfessionalCAWebsite: React.FC = () => {
                     ))}
                   </div>
                   <p className="text-gray-700 italic mb-6 leading-relaxed text-lg">
-                    "{testimonial.content}"
+                    "{testimonial.text}"
                   </p>
                   <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
@@ -561,6 +574,16 @@ export const ProfessionalCAWebsite: React.FC = () => {
         }
         .animation-delay-4000 {
           animation-delay: 4s;
+        }
+        @keyframes slide-slow {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-66.666%); }
+        }
+        .animate-slide-slow {
+          animation: slide-slow 20s linear infinite;
+        }
+        .animate-slide-slow:hover {
+          animation-play-state: paused;
         }
       `}</style>
     </div>

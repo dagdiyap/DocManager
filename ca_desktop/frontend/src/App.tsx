@@ -15,6 +15,7 @@ import PortalDashboard from './components/client/Dashboard'
 import PublicWebsite from './components/public/PublicWebsite'
 import { ProfessionalCAWebsite } from './components/public/ProfessionalCAWebsite'
 import { CAClientLogin } from './components/client/CAClientLogin'
+import { PasswordReset } from './components/client/PasswordReset'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 
 function AppRoutes() {
@@ -29,6 +30,7 @@ function AppRoutes() {
             {/* Multi-tenant Public Routes */}
             <Route path="/:caSlug" element={<ProfessionalCAWebsite />} />
             <Route path="/:caSlug/login" element={<CAClientLogin />} />
+            <Route path="/:caSlug/reset-password" element={<PasswordReset />} />
             <Route path="/:caSlug/home" element={userType === 'client' ? <PortalDashboard /> : <Navigate to="/:caSlug/login" />} />
 
             {/* CA Login */}

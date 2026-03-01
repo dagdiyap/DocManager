@@ -165,10 +165,16 @@ export const CAClientLogin: React.FC = () => {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center space-y-3">
+            <button
+              onClick={() => navigate(`/ca-${caSlug}/reset-password`)}
+              className="text-sm text-indigo-600 hover:underline block w-full"
+            >
+              Forgot Password?
+            </button>
             <button
               onClick={() => navigate(`/ca-${caSlug}`)}
-              className="text-sm text-indigo-600 hover:underline"
+              className="text-sm text-gray-600 hover:underline"
             >
               ← Back to CA Profile
             </button>
