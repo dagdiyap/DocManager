@@ -87,8 +87,11 @@ class Settings(BaseSettings):
         description="Root directory for manually shared files",
     )
 
-    # Server — 127.0.0.1 prevents Windows Firewall popup for desktop use
-    host: str = Field(default="127.0.0.1", description="Server host")
+    # Server — 127.0.0.1 for local desktop, 0.0.0.0 when EXTERNAL_ACCESS=true
+    host: str = Field(
+        default_factory=lambda: "0.0.0.0" if os.environ.get("EXTERNAL_ACCESS", "").lower() in ("true", "1", "yes") else "127.0.0.1",
+        description="Server host",
+    )
     port: int = Field(default=8443, ge=1024, le=65535, description="Server port")
     enable_https: bool = Field(default=True, description="Enable HTTPS")
 
@@ -114,15 +117,17 @@ class Settings(BaseSettings):
         description="File to store device fingerprint",
     )
 
-    # CORS — include all ports the frontend may use
+    # CORS — include all ports the frontend may use + external origins
     cors_origins: list[str] = Field(
-        default=[
+        default_factory=lambda: [
             "http://localhost:3000",
             "http://localhost:5173",
             "http://localhost:5174",
             "http://127.0.0.1:3000",
             "http://127.0.0.1:5173",
             "http://127.0.0.1:5174",
+        ] + [
+            o.strip() for o in os.environ.get("EXTRA_CORS_ORIGINS", "").split(",") if o.strip()
         ],
         description="Allowed CORS origins",
     )

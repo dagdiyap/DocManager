@@ -1,126 +1,90 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
-  Building2, Mail, Phone, MapPin, Globe, ChevronRight,
+  Building2, Mail, Phone, MapPin, ChevronRight,
   CheckCircle, Users, TrendingUp, FileText,
   Factory, ShoppingBag, Home as HomeIcon, Briefcase, Star
 } from 'lucide-react';
-import axios from 'axios';
 
-const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'https://your-backend-url.com/api/v1';
+// All data hardcoded — no backend API dependency
+const FIRM = {
+  name: 'Dagdiya Associates',
+  photo: 'https://www.spmlindia.com/resource/Image/Lokesh.jpg',
+  address: 'Nagpur, Maharashtra, India',
+  phone: '+91 98901 54945',
+  email: 'ca.lokesh.dagdiya@gmail.com',
+  website: 'https://ca-lokesh-dagdiya.vercel.app',
+};
 
-interface CAWebsiteData {
-  slug: string;
-  display_name: string;
-  username: string;
-  profile: {
-    firm_name: string | null;
-    logo_path: string | null;
-    professional_bio: string | null;
-    address: string | null;
-    phone_number: string | null;
-    email: string | null;
-    website_url: string | null;
-    media_items?: { file_path?: string; url?: string; title?: string }[];
-  } | null;
-  services: Array<{
-    id: number;
-    title: string;
-    description: string;
-  }>;
-  testimonials: Array<{
-    id: number;
-    client_name: string;
-    text: string;
-    rating: number;
-  }>;
-}
+const SERVICES = [
+  {
+    id: 1,
+    title: 'GST Compliance & Advisory',
+    description:
+      'End-to-end GST services including registration, return filing, reconciliation, audit support, and advisory for complex GST matters across all business types.',
+  },
+  {
+    id: 2,
+    title: 'Income Tax Planning & Filing',
+    description:
+      'Strategic tax planning for individuals, HUFs, firms, and corporates. Advance tax computation, ITR filing, assessment support, and representation before tax authorities.',
+  },
+  {
+    id: 3,
+    title: 'Statutory & Internal Audits',
+    description:
+      'Comprehensive statutory audits, tax audits, internal audits, and special-purpose audits with detailed reporting and actionable recommendations for business improvement.',
+  },
+  {
+    id: 4,
+    title: 'Company Formation & Compliance',
+    description:
+      'Complete company incorporation, LLP formation, ROC filings, annual compliance, board resolutions, and secretarial services for seamless business operations.',
+  },
+  {
+    id: 5,
+    title: 'Accounting & Bookkeeping',
+    description:
+      'Professional bookkeeping, financial statement preparation, bank reconciliation, payroll processing, and MIS reporting tailored to your business needs.',
+  },
+  {
+    id: 6,
+    title: 'Business Advisory & Consulting',
+    description:
+      'Strategic business consulting including financial planning, project feasibility studies, loan syndication, business valuation, and succession planning.',
+  },
+];
+
+const TESTIMONIALS = [
+  {
+    id: 1,
+    client_name: 'Rajesh Patil, Manufacturing Unit Owner',
+    text: 'We have been associated with Dagdiya Associates for over 15 years. Their expertise in GST compliance during the transition from VAT was invaluable. CA Lokesh personally ensured our manufacturing unit had zero compliance issues. Their proactive approach to tax planning has saved us lakhs every year.',
+    rating: 5,
+  },
+  {
+    id: 2,
+    client_name: 'Priya Sharma, Real Estate Developer',
+    text: 'As a real estate developer, tax complexities are enormous. Dagdiya Associates has been our trusted advisor for 8 years. Their deep knowledge of real estate taxation, RERA compliance, and GST on under-construction properties gives us complete peace of mind. Highly recommended for anyone in the construction industry.',
+    rating: 5,
+  },
+  {
+    id: 3,
+    client_name: 'Amit Deshmukh, Retail Chain Owner',
+    text: 'From a single retail store to a chain of 12 outlets, Dagdiya Associates has been with us every step of the way. Their accounting systems, inventory management advice, and multi-location GST compliance handling is top-notch. CA Lokesh treats our business like his own.',
+    rating: 5,
+  },
+];
+
+const INDUSTRIES = [
+  { icon: Factory, name: 'Manufacturing', color: 'bg-blue-100 text-blue-600' },
+  { icon: ShoppingBag, name: 'Retail & E-commerce', color: 'bg-purple-100 text-purple-600' },
+  { icon: HomeIcon, name: 'Real Estate', color: 'bg-green-100 text-green-600' },
+  { icon: Briefcase, name: 'Professional Services', color: 'bg-orange-100 text-orange-600' },
+  { icon: TrendingUp, name: 'Startups & SMEs', color: 'bg-red-100 text-red-600' },
+  { icon: Building2, name: 'Construction', color: 'bg-indigo-100 text-indigo-600' },
+];
 
 export const CAWebsite: React.FC = () => {
-  // Hardcoded for Lokesh Dagdiya's website
-  const caSlug = 'lokesh-dagdiya';
-  const [data, setData] = useState<CAWebsiteData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/public/ca-slug/${caSlug}`);
-        setData(response.data);
-      } catch (err: any) {
-        setError(err.response?.data?.detail || 'CA not found');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [caSlug]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 font-medium">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !data) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50">
-        <div className="text-center max-w-md mx-4">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">Website Loading Error</h1>
-          <p className="text-gray-600 mb-8">{error || 'Unable to load website data.'}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
-          >
-            Reload Page
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const firmName = data.profile?.firm_name || data.display_name || data.username;
-
-  // Default services if none configured
-  const services = data.services?.length > 0 ? data.services : [
-    {
-      id: 1,
-      title: "Tax Planning & Compliance",
-      description: "Expert guidance on income tax, GST, and regulatory compliance to optimize your tax liability."
-    },
-    {
-      id: 2,
-      title: "Audit & Assurance",
-      description: "Comprehensive audit services ensuring accuracy, compliance, and financial transparency."
-    },
-    {
-      id: 3,
-      title: "Business Advisory",
-      description: "Strategic financial advice to help your business grow and achieve its goals."
-    },
-    {
-      id: 4,
-      title: "Accounting Services",
-      description: "Complete bookkeeping, financial reporting, and accounting solutions for your business."
-    },
-  ];
-
-  // Default industries
-  const industries = [
-    { icon: Factory, name: "Manufacturing", color: "bg-blue-100 text-blue-600" },
-    { icon: ShoppingBag, name: "Retail & E-commerce", color: "bg-purple-100 text-purple-600" },
-    { icon: HomeIcon, name: "Real Estate", color: "bg-green-100 text-green-600" },
-    { icon: Briefcase, name: "Professional Services", color: "bg-orange-100 text-orange-600" },
-    { icon: TrendingUp, name: "Startups & SMEs", color: "bg-red-100 text-red-600" },
-    { icon: Building2, name: "Construction", color: "bg-indigo-100 text-indigo-600" },
-  ];
-
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -128,25 +92,20 @@ export const CAWebsite: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
-              {data.profile?.logo_path ? (
-                <img
-                  src={data.profile.logo_path}
-                  alt={firmName}
-                  className="h-10 w-10 rounded-full object-cover"
-                />
-              ) : (
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
-                  {firmName.charAt(0).toUpperCase()}
-                </div>
-              )}
-              <span className="text-xl font-bold text-gray-900">{firmName}</span>
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
+                D
+              </div>
+              <span className="text-xl font-bold text-gray-900">{FIRM.name}</span>
             </div>
             <div className="flex items-center gap-4">
+              <a href="#services" className="hidden sm:inline text-gray-700 hover:text-blue-600 transition font-medium">
+                Services
+              </a>
               <a href="#contact" className="text-gray-700 hover:text-blue-600 transition font-medium">
                 Contact
               </a>
               <a
-                href="tel:+919890154945"
+                href={`tel:${FIRM.phone}`}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold text-sm"
               >
                 Call Us
@@ -195,7 +154,7 @@ export const CAWebsite: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="tel:+919890154945"
+                href={`tel:${FIRM.phone}`}
                 className="px-8 py-4 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition font-bold text-lg shadow-xl flex items-center justify-center gap-2"
               >
                 <Phone size={20} />
@@ -260,80 +219,21 @@ export const CAWebsite: React.FC = () => {
               </div>
             </div>
             <div className="order-1 md:order-2 relative">
-              {/* Use Lokesh's photo for lokesh-dagdiya, otherwise professional CA image */}
-              {caSlug === 'lokesh-dagdiya' ? (
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                  <img
-                    src="https://www.spmlindia.com/resource/Image/Lokesh.jpg"
-                    alt="CA Lokesh Dagdiya"
-                    className="w-full h-auto object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                </div>
-              ) : data.profile?.logo_path ? (
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                  <img
-                    src={data.profile.logo_path}
-                    alt={firmName}
-                    className="w-full h-auto object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                </div>
-              ) : (
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                  <img
-                    src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&h=600&fit=crop&q=80"
-                    alt="Professional Chartered Accountant"
-                    className="w-full h-auto object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                </div>
-              )}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src={FIRM.photo}
+                  alt="CA Lokesh Dagdiya"
+                  className="w-full h-auto object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Photo Gallery Section - if media items exist */}
-      {data.profile?.media_items && data.profile.media_items.length > 0 && (
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <div className="inline-block px-4 py-2 bg-indigo-100 text-indigo-600 rounded-full text-sm font-semibold mb-4">
-                Our Office
-              </div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Gallery</h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                A glimpse into our professional workspace
-              </p>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {data.profile.media_items.slice(0, 10).map((item: any, idx: number) => (
-                <div
-                  key={idx}
-                  className="group relative aspect-square rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-                >
-                  <img
-                    src={item.file_path || item.url}
-                    alt={item.title || `Gallery ${idx + 1}`}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    {item.title && (
-                      <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <p className="text-white font-semibold">{item.title}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Services Section with Background */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
+      {/* Services Section */}
+      <section id="services" className="py-20 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
         <div className="absolute inset-0 opacity-5">
           <img
             src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=1080&fit=crop&q=80"
@@ -351,10 +251,10 @@ export const CAWebsite: React.FC = () => {
               Comprehensive financial solutions designed to meet all your business needs
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service, idx) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {SERVICES.map((service, idx) => (
               <div
-                key={service.id || idx}
+                key={service.id}
                 className="bg-white border-2 border-gray-200 rounded-2xl p-6 hover:border-blue-600 hover:shadow-2xl transition-all duration-300 group transform hover:-translate-y-2 cursor-pointer"
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
@@ -374,7 +274,7 @@ export const CAWebsite: React.FC = () => {
         </div>
       </section>
 
-      {/* Industries We Serve with Background Images */}
+      {/* Industries We Serve */}
       <section className="py-20 bg-gray-900 relative overflow-hidden">
         <div className="absolute inset-0">
           <img
@@ -391,7 +291,7 @@ export const CAWebsite: React.FC = () => {
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {industries.map((industry, idx) => {
+            {INDUSTRIES.map((industry, idx) => {
               const Icon = industry.icon;
               return (
                 <div
@@ -413,50 +313,49 @@ export const CAWebsite: React.FC = () => {
       </section>
 
       {/* Testimonials */}
-      {data.testimonials && data.testimonials.length > 0 && (
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Client Testimonials</h2>
-              <p className="text-xl text-gray-600">What our clients say about us</p>
-            </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              {data.testimonials.slice(0, 3).map((testimonial, idx) => (
-                <div
-                  key={testimonial.id}
-                  className="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-blue-600 hover:shadow-2xl transition-all duration-300 group transform hover:-translate-y-2"
-                  style={{ animationDelay: `${idx * 100}ms` }}
-                >
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        size={20}
-                        className={`transition-all duration-300 ${i < testimonial.rating
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Client Testimonials</h2>
+            <p className="text-xl text-gray-600">What our clients say about us</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {TESTIMONIALS.map((testimonial, idx) => (
+              <div
+                key={testimonial.id}
+                className="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-blue-600 hover:shadow-2xl transition-all duration-300 group transform hover:-translate-y-2"
+                style={{ animationDelay: `${idx * 100}ms` }}
+              >
+                <div className="flex gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      size={20}
+                      className={`transition-all duration-300 ${
+                        i < testimonial.rating
                           ? 'text-yellow-400 fill-yellow-400 group-hover:scale-110'
                           : 'text-gray-300'
-                          }`}
-                      />
-                    ))}
+                      }`}
+                    />
+                  ))}
+                </div>
+                <p className="text-gray-700 italic mb-6 leading-relaxed text-lg">
+                  &ldquo;{testimonial.text}&rdquo;
+                </p>
+                <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
+                    {testimonial.client_name.charAt(0)}
                   </div>
-                  <p className="text-gray-700 italic mb-6 leading-relaxed text-lg">
-                    "{testimonial.text}"
-                  </p>
-                  <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
-                      {testimonial.client_name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="font-bold text-gray-900">{testimonial.client_name}</p>
-                      <p className="text-sm text-gray-500">Valued Client</p>
-                    </div>
+                  <div>
+                    <p className="font-bold text-gray-900">{testimonial.client_name}</p>
+                    <p className="text-sm text-gray-500">Valued Client</p>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-gray-900 text-white">
@@ -468,58 +367,36 @@ export const CAWebsite: React.FC = () => {
                 Ready to take control of your finances? Contact us today for a consultation.
               </p>
               <div className="space-y-4">
-                {data.profile?.address && (
-                  <div className="flex items-start gap-4">
-                    <MapPin className="text-blue-400 flex-shrink-0 mt-1" size={24} />
-                    <div>
-                      <p className="font-semibold">Address</p>
-                      <p className="text-gray-300">{data.profile.address}</p>
-                    </div>
+                <div className="flex items-start gap-4">
+                  <MapPin className="text-blue-400 flex-shrink-0 mt-1" size={24} />
+                  <div>
+                    <p className="font-semibold">Address</p>
+                    <p className="text-gray-300">{FIRM.address}</p>
                   </div>
-                )}
-                {data.profile?.phone_number && (
-                  <div className="flex items-start gap-4">
-                    <Phone className="text-blue-400 flex-shrink-0 mt-1" size={24} />
-                    <div>
-                      <p className="font-semibold">Phone</p>
-                      <a href={`tel:${data.profile.phone_number}`} className="text-gray-300 hover:text-blue-400 transition">
-                        {data.profile.phone_number}
-                      </a>
-                    </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <Phone className="text-blue-400 flex-shrink-0 mt-1" size={24} />
+                  <div>
+                    <p className="font-semibold">Phone</p>
+                    <a href={`tel:${FIRM.phone}`} className="text-gray-300 hover:text-blue-400 transition">
+                      {FIRM.phone}
+                    </a>
                   </div>
-                )}
-                {data.profile?.email && (
-                  <div className="flex items-start gap-4">
-                    <Mail className="text-blue-400 flex-shrink-0 mt-1" size={24} />
-                    <div>
-                      <p className="font-semibold">Email</p>
-                      <a href={`mailto:${data.profile.email}`} className="text-gray-300 hover:text-blue-400 transition">
-                        {data.profile.email}
-                      </a>
-                    </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <Mail className="text-blue-400 flex-shrink-0 mt-1" size={24} />
+                  <div>
+                    <p className="font-semibold">Email</p>
+                    <a href={`mailto:${FIRM.email}`} className="text-gray-300 hover:text-blue-400 transition">
+                      {FIRM.email}
+                    </a>
                   </div>
-                )}
-                {data.profile?.website_url && (
-                  <div className="flex items-start gap-4">
-                    <Globe className="text-blue-400 flex-shrink-0 mt-1" size={24} />
-                    <div>
-                      <p className="font-semibold">Website</p>
-                      <a
-                        href={data.profile.website_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-300 hover:text-blue-400 transition"
-                      >
-                        {data.profile.website_url}
-                      </a>
-                    </div>
-                  </div>
-                )}
+                </div>
               </div>
             </div>
             <div className="bg-white text-gray-900 rounded-xl p-8">
               <h3 className="text-2xl font-bold mb-6">Quick Inquiry</h3>
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
                 <input
                   type="text"
                   placeholder="Your Name"
@@ -555,26 +432,12 @@ export const CAWebsite: React.FC = () => {
       {/* Footer */}
       <footer className="bg-black text-gray-400 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p>© {new Date().getFullYear()} {firmName}. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {FIRM.name}. All rights reserved.</p>
           <p className="mt-2 text-sm">Powered by DocManager</p>
         </div>
       </footer>
 
       <style>{`
-        @keyframes blob {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
         @keyframes slide-slow {
           0% { transform: translateX(0); }
           100% { transform: translateX(-66.666%); }
