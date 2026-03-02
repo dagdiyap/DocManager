@@ -1,5 +1,6 @@
 """WhatsApp bot API endpoints."""
 
+import logging
 from typing import Optional
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
@@ -9,16 +10,33 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..services.whatsapp.handler import MessageHandler
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter(tags=["whatsapp"])
+
+# Singleton handler — persists conversation context across requests
+_handler_instance: Optional[MessageHandler] = None
+
+
+def get_handler(db: Session) -> MessageHandler:
+    """Get or create singleton MessageHandler, updating its DB session."""
+    global _handler_instance
+    if _handler_instance is None:
+        _handler_instance = MessageHandler(db)
+    else:
+        _handler_instance.db = db
+        _handler_instance.doc_service.db = db
+        _handler_instance.bot_state.db = db
+    return _handler_instance
 
 
 class IncomingMessage(BaseModel):
     """Incoming WhatsApp message."""
     phone: str
-    message: str
+    message: str = ""
     has_media: bool = False
-    message_id: str
-    timestamp: int
+    message_id: str = ""
+    timestamp: int = 0
 
 
 @router.post("/whatsapp/incoming")
@@ -28,12 +46,12 @@ async def handle_incoming_message(
 ):
     """Handle incoming WhatsApp message from Node.js server."""
     try:
-        handler = MessageHandler(db)
+        handler = get_handler(db)
         await handler.handle_message(msg.phone, msg.message)
         return {"status": "ok"}
     except Exception as e:
-        print(f"[WhatsApp API] Error handling message: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Error handling message: {e}", exc_info=True)
+        return {"status": "error", "detail": str(e)}
 
 
 @router.post("/whatsapp/upload")
@@ -45,11 +63,9 @@ async def handle_media_upload(
 ):
     """Handle media file upload from WhatsApp."""
     try:
-        # Read file data
         file_data = await file.read()
         
-        # Process upload
-        handler = MessageHandler(db)
+        handler = get_handler(db)
         await handler.handle_media_upload(
             phone=phone,
             file_data=file_data,
@@ -59,8 +75,8 @@ async def handle_media_upload(
         
         return {"status": "ok", "filename": file.filename}
     except Exception as e:
-        print(f"[WhatsApp API] Error handling upload: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Error handling upload: {e}", exc_info=True)
+        return {"status": "error", "detail": str(e)}
 
 
 @router.post("/whatsapp/enable-bot/{phone}")

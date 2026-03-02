@@ -388,19 +388,21 @@ class MessageHandler:
         """Send document via WhatsApp server."""
         import os
         
-        if not file_path or not os.path.exists(file_path):
-            logger.error(f"Invalid or missing file: {file_path}")
+        abs_path = os.path.abspath(file_path)
+        
+        if not abs_path or not os.path.exists(abs_path):
+            logger.error(f"Invalid or missing file: {file_path} (abs: {abs_path})")
             raise FileNotFoundError(f"File not found: {file_path}")
         
-        file_size = os.path.getsize(file_path)
+        file_size = os.path.getsize(abs_path)
         if file_size > 100 * 1024 * 1024:
-            logger.error(f"File too large: {file_path} ({file_size} bytes)")
+            logger.error(f"File too large: {abs_path} ({file_size} bytes)")
             raise ValueError(f"File too large: {file_size} bytes")
         
         try:
             response = requests.post(
                 f"{self.whatsapp_url}/send-document",
-                json={"phone": self._format_outbound_phone(phone), "file_path": file_path, "caption": caption},
+                json={"phone": self._format_outbound_phone(phone), "file_path": abs_path, "caption": caption},
                 timeout=30
             )
             response.raise_for_status()

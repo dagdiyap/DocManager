@@ -13,6 +13,9 @@ class WhatsAppClient {
         this.client = null;
         this.isReady = false;
         this.messageHandlers = [];
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 10;
+        this.reconnecting = false;
     }
 
     /**
@@ -75,10 +78,11 @@ class WhatsAppClient {
             console.error('[WhatsApp] Authentication failed:', msg);
         });
 
-        // Disconnected event
-        this.client.on('disconnected', (reason) => {
+        // Disconnected event — auto-reconnect
+        this.client.on('disconnected', async (reason) => {
             console.log('[WhatsApp] Client disconnected:', reason);
             this.isReady = false;
+            await this._reconnect();
         });
 
         // Message event
@@ -102,17 +106,17 @@ class WhatsAppClient {
      */
     async handleIncomingMessage(message) {
         try {
-            // Extract phone number (remove @c.us suffix)
-            const phone = message.from.replace('@c.us', '');
-            
-            // Create message object
+            // Skip status updates
+            if (message.from === 'status@broadcast') return;
+
+            // Keep full chat ID for group filtering in server.js
             const msgData = {
-                from: phone,
-                body: message.body,
+                from: message.from,
+                body: message.body || '',
                 hasMedia: message.hasMedia,
                 type: message.type,
                 timestamp: message.timestamp,
-                id: message.id._serialized
+                id: message.id ? message.id._serialized : `msg_${Date.now()}`
             };
 
             // Call all registered handlers
@@ -183,6 +187,37 @@ class WhatsAppClient {
             console.error('[WhatsApp] Error downloading media:', error);
             throw error;
         }
+    }
+
+    /**
+     * Auto-reconnect with exponential backoff.
+     */
+    async _reconnect() {
+        if (this.reconnecting) return;
+        this.reconnecting = true;
+
+        while (this.reconnectAttempts < this.maxReconnectAttempts && !this.isReady) {
+            this.reconnectAttempts++;
+            const delay = Math.min(5000 * this.reconnectAttempts, 60000);
+            console.log(`[WhatsApp] Reconnecting in ${delay / 1000}s (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})...`);
+            await new Promise(r => setTimeout(r, delay));
+
+            try {
+                await this.client.destroy().catch(() => {});
+                this.client = null;
+                await this.initialize();
+                this.reconnectAttempts = 0;
+                console.log('[WhatsApp] Reconnected successfully');
+                break;
+            } catch (error) {
+                console.error(`[WhatsApp] Reconnect attempt ${this.reconnectAttempts} failed:`, error.message);
+            }
+        }
+
+        if (!this.isReady && this.reconnectAttempts >= this.maxReconnectAttempts) {
+            console.error('[WhatsApp] Max reconnect attempts reached. Manual restart required.');
+        }
+        this.reconnecting = false;
     }
 
     /**
