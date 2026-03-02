@@ -1,6 +1,6 @@
 """Improved reminders router with multi-client, multi-document support."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -113,7 +113,7 @@ def create_reminders(
     # Update sent status in database
     for reminder in reminders_created:
         reminder.is_sent = True
-        reminder.sent_at = datetime.utcnow()
+        reminder.sent_at = datetime.now(timezone.utc)
         if reminder_data.send_via_email:
             reminder.email_sent = True
         if reminder_data.send_via_whatsapp:

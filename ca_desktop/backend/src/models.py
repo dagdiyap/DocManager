@@ -1,6 +1,11 @@
 """Database models for CA Desktop."""
 
-from datetime import datetime
+from datetime import datetime, timezone
+
+
+def _utcnow():
+    """Timezone-aware UTC now — replaces deprecated _utcnow()."""
+    return datetime.now(timezone.utc)
 
 from sqlalchemy import (
     JSON,
@@ -32,7 +37,7 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     display_name = Column(String(255), nullable=True)  # For public profile
     slug = Column(String(50), unique=True, nullable=True, index=True)  # URL-safe identifier
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)
     last_login = Column(DateTime, nullable=True)
 
     # Relationships
@@ -56,7 +61,7 @@ class Client(Base):
     password_hash = Column(String(255), nullable=False)
     email = Column(String(255), nullable=True)
     client_type = Column(String(50), nullable=True)  # 'Salaried', 'Business', 'Partnership'
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)
     last_login = Column(DateTime, nullable=True)
     is_active = Column(Boolean, default=True, nullable=False)
 
@@ -77,7 +82,7 @@ class Session(Base):
     session_token = Column(String(255), unique=True, nullable=False, index=True)
     user_type = Column(String(10), nullable=False)  # 'ca' or 'client'
     user_id = Column(Integer, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)
     expires_at = Column(DateTime, nullable=False, index=True)
     ip_address = Column(String(45), nullable=True)
     user_agent = Column(Text, nullable=True)
@@ -101,7 +106,7 @@ class Document(Base):
     file_path = Column(Text, nullable=False)
     file_size = Column(BigInteger, nullable=True)
     file_hash = Column(String(64), nullable=True)  # SHA256
-    uploaded_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    uploaded_at = Column(DateTime, default=_utcnow, nullable=False)
     modified_at = Column(DateTime, nullable=True)
     is_deleted = Column(Boolean, default=False, nullable=False)
     is_tagged = Column(Boolean, default=False, nullable=False)
@@ -127,7 +132,7 @@ class DocumentTag(Base):
     name = Column(String(50), unique=True, nullable=False, index=True)  # 'ITR', 'Form 16', etc.
     description = Column(String(255), nullable=True)
     regex_pattern = Column(String(255), nullable=True)  # e.g., 'ITR|Income Tax Return'
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)
 
     # Relationships
     documents = relationship("Document", secondary="document_document_tag", back_populates="tags")
@@ -166,7 +171,7 @@ class ComplianceRule(Base):
     required_document_tags = Column(
         JSON, nullable=False
     )  # List of tag names: ['ITR', 'Form 16', 'Bank Statement']
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)
 
 
 class Reminder(Base):
@@ -211,7 +216,7 @@ class Reminder(Base):
     whatsapp_sent = Column(Boolean, default=False, nullable=False)
     
     created_by_ca_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)
 
     # Relationships
     client = relationship("Client", back_populates="reminders")
@@ -238,8 +243,8 @@ class CAProfile(Base):
     email = Column(String(100), nullable=True)
     website_url = Column(String(255), nullable=True)
     linkedin_url = Column(String(255), nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)
+    updated_at = Column(DateTime, default=_utcnow, onupdate=_utcnow, nullable=False)
 
     # Relationships
     ca_user = relationship("User", back_populates="ca_profile")
@@ -260,7 +265,7 @@ class CAMediaItem(Base):
     description = Column(Text, nullable=True)
     order_index = Column(Integer, nullable=False, default=0)
     is_active = Column(Boolean, default=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)
 
     # Relationships
     ca_user = relationship("User", back_populates="media_items")
@@ -280,7 +285,7 @@ class Service(Base):
     background_image_path = Column(String(255), nullable=True)
     order_index = Column(Integer, nullable=False, default=0)
     is_active = Column(Boolean, default=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)
 
     # Relationships
     ca_user = relationship("User", back_populates="services")
@@ -299,7 +304,7 @@ class Testimonial(Base):
     verified_client_id = Column(Integer, ForeignKey("clients.id"), nullable=True)
     order_index = Column(Integer, nullable=False, default=0)
     is_active = Column(Boolean, default=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)
 
     # Relationships
     ca_user = relationship("User", back_populates="testimonials")
@@ -320,7 +325,7 @@ class Message(Base):
     subject = Column(String(255), nullable=False)
     body = Column(Text, nullable=False)
     sent_by_user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    sent_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+    sent_at = Column(DateTime, default=_utcnow, nullable=False, index=True)
     is_read = Column(Boolean, default=False, nullable=False)
     read_at = Column(DateTime, nullable=True)
 
@@ -347,7 +352,7 @@ class SharedFile(Base):
     file_hash = Column(String(64), nullable=True)  # SHA256
     description = Column(Text, nullable=True)
     sent_by_user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    sent_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+    sent_at = Column(DateTime, default=_utcnow, nullable=False, index=True)
     is_downloaded = Column(Boolean, default=False, nullable=False)
     downloaded_at = Column(DateTime, nullable=True)
 
@@ -371,7 +376,7 @@ class Download(Base):
     download_type = Column(String(20), nullable=False)  # 'document' or 'shared_file'
     file_id = Column(Integer, nullable=False)  # ID from documents or shared_files
     download_token = Column(String(255), nullable=False, unique=True)  # For single-use enforcement
-    downloaded_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+    downloaded_at = Column(DateTime, default=_utcnow, nullable=False, index=True)
     ip_address = Column(String(45), nullable=True)
     user_agent = Column(Text, nullable=True)
     success = Column(Boolean, default=True, nullable=False)
@@ -391,7 +396,7 @@ class AuditLog(Base):
     user_id = Column(String(100), nullable=True)  # User ID or client phone
     event_details = Column(Text, nullable=True)  # JSON serialized
     ip_address = Column(String(45), nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+    created_at = Column(DateTime, default=_utcnow, nullable=False, index=True)
     severity = Column(String(20), default="INFO", nullable=False)
 
 
@@ -404,7 +409,7 @@ class TaskQueue(Base):
     task_type = Column(String(100), nullable=False, index=True)
     task_payload = Column(Text, nullable=True)  # JSON serialized
     status = Column(String(20), default="pending", nullable=False, index=True)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=_utcnow, nullable=False)
     started_at = Column(DateTime, nullable=True)
     completed_at = Column(DateTime, nullable=True)
     error_message = Column(Text, nullable=True)
@@ -421,7 +426,7 @@ class DocumentUpload(Base):
     file_path = Column(Text, nullable=False)
     file_size = Column(BigInteger, nullable=True)
     mime_type = Column(String(100), nullable=True)
-    uploaded_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    uploaded_at = Column(DateTime, default=_utcnow, nullable=False)
     processed = Column(Boolean, default=False, nullable=False)
     notes = Column(Text, nullable=True)
 

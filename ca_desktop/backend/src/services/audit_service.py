@@ -1,6 +1,6 @@
 """Audit logging service for tracking critical actions."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 from sqlalchemy.orm import Session
@@ -37,7 +37,7 @@ def log_audit_event(
             user_id=user_id,
             event_details=event_details,
             ip_address=ip_address,
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(timezone.utc),
         )
         db.add(audit_log)
         db.commit()

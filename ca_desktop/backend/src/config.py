@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -142,7 +142,8 @@ class Settings(BaseSettings):
         description="Resend API key for sending emails (optional)",
     )
 
-    @validator("log_file", pre=True)
+    @field_validator("log_file", mode="before")
+    @classmethod
     def create_log_directory(cls, v: Optional[Path]) -> Optional[Path]:
         """Create log directory if it doesn't exist."""
         if v:
@@ -150,14 +151,16 @@ class Settings(BaseSettings):
             v.parent.mkdir(parents=True, exist_ok=True)
         return v
 
-    @validator("documents_root", "shared_files_root")
+    @field_validator("documents_root", "shared_files_root")
+    @classmethod
     def create_storage_directory(cls, v: Path) -> Path:
         """Create storage directory if it doesn't exist."""
         v = Path(v)
         v.mkdir(parents=True, exist_ok=True)
         return v
 
-    @validator("public_key_path")
+    @field_validator("public_key_path")
+    @classmethod
     def validate_public_key(cls, v: Path) -> Path:
         """Validate public key exists."""
         v = Path(v)

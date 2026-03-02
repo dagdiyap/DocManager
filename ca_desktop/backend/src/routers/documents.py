@@ -1,7 +1,7 @@
 """Document management and download router."""
 
 import hashlib
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -126,7 +126,7 @@ def upload_document(
     if existing_doc:
         existing_doc.file_size = file_size
         existing_doc.file_hash = file_hash
-        existing_doc.modified_at = datetime.utcnow()
+        existing_doc.modified_at = datetime.now(timezone.utc)
         existing_doc.is_deleted = False
         db.commit()
         db.refresh(existing_doc)
@@ -140,7 +140,7 @@ def upload_document(
             file_path=str(save_path.relative_to(doc_root)).replace("\\", "/"),
             file_size=file_size,
             file_hash=file_hash,
-            uploaded_at=datetime.utcnow(),
+            uploaded_at=datetime.now(timezone.utc),
             is_deleted=False,
         )
         db.add(new_doc)

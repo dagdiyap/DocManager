@@ -1,6 +1,6 @@
 """Authentication dependencies and session management."""
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
 from fastapi import Depends, HTTPException, status
@@ -28,9 +28,9 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     settings = config.get_settings()
     to_encode = data.copy()
     if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+        expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(hours=24)
+        expire = datetime.now(timezone.utc) + timedelta(hours=24)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm="HS256")
     return str(encoded_jwt)
@@ -62,7 +62,7 @@ async def get_current_user_data(
             models.Session.session_token == token,
             models.Session.user_id == int(user_id),
             models.Session.user_type == user_type,
-            models.Session.expires_at > datetime.utcnow(),
+            models.Session.expires_at > datetime.now(timezone.utc),
         )
         .first()
     )

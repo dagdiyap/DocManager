@@ -1,7 +1,7 @@
 """Main entry point for the CA Desktop Backend."""
 
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 
 from pathlib import Path
 
@@ -83,7 +83,7 @@ async def ca_desktop_exception_handler(request: Request, exc: CADesktopError):
             "error": exc.error_code,
             "message": exc.message,
             "details": exc.details,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         },
     )
 
@@ -103,7 +103,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
             "error": "validation_error",
             "message": "Invalid request data",
             "details": errors,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         },
     )
 
@@ -117,7 +117,7 @@ async def general_exception_handler(request: Request, exc: Exception):
         content={
             "error": "internal_server_error",
             "message": "An unexpected error occurred. Please try again later.",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         },
     )
 

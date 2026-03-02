@@ -30,6 +30,7 @@ def test_db():
     yield session
     
     session.close()
+    engine.dispose()
 
 
 @pytest.fixture

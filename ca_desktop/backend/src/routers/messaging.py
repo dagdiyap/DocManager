@@ -1,7 +1,7 @@
 """Messaging and manual file sharing router."""
 
 import shutil
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from ca_desktop.backend.src import database, models, schemas
@@ -91,7 +91,7 @@ def download_shared_file(token: str, request: Request, db: Session = Depends(dat
         )
         # Update is_downloaded flag
         shared_file.is_downloaded = True
-        shared_file.downloaded_at = datetime.utcnow()
+        shared_file.downloaded_at = datetime.now(timezone.utc)
 
         db.add(download_log)
         db.commit()

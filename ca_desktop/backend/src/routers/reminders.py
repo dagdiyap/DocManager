@@ -1,6 +1,6 @@
 """Reminders and notifications router."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -244,11 +244,11 @@ def send_group_reminders(
                     client_phone=client.phone_number,
                     reminder_type="document_type",
                     tag_id=tag_id,
-                    reminder_date=datetime.utcnow(),
+                    reminder_date=datetime.now(timezone.utc),
                     message=message or f"Please arrange {tag.name} documents",
                     created_by_ca_id=ca_user.id,
                     is_sent=True,
-                    sent_at=datetime.utcnow(),
+                    sent_at=datetime.now(timezone.utc),
                 )
                 db.add(reminder)
                 reminders_created.append(reminder)
@@ -293,11 +293,11 @@ def send_group_reminders(
                     client_phone=client.phone_number,
                     reminder_type="compliance",
                     compliance_rule_id=compliance_rule_id,
-                    reminder_date=datetime.utcnow(),
+                    reminder_date=datetime.now(timezone.utc),
                     message=message or f"Please arrange documents as per {rule.name}",
                     created_by_ca_id=ca_user.id,
                     is_sent=True,
-                    sent_at=datetime.utcnow(),
+                    sent_at=datetime.now(timezone.utc),
                 )
                 db.add(reminder)
                 reminders_created.append(reminder)

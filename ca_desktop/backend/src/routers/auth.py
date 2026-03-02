@@ -1,6 +1,6 @@
 """Authentication router for CA Desktop."""
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional, Union
 
 from ca_desktop.backend.src import database, dependencies, models, schemas
@@ -55,7 +55,7 @@ def register(user_in: schemas.UserCreate, db: Session = Depends(database.get_db)
         password_hash=get_password_hash(user_in.password),
         display_name=user_in.display_name,
         slug=slug,
-        created_at=datetime.utcnow(),
+        created_at=datetime.now(timezone.utc),
     )
     db.add(new_user)
     db.commit()
@@ -117,12 +117,12 @@ def login(
         session_token=access_token,
         user_type=user_type,
         user_id=user.id,
-        expires_at=datetime.utcnow() + timedelta(hours=24),
+        expires_at=datetime.now(timezone.utc) + timedelta(hours=24),
     )
     db.add(new_session)
 
     # Update last login
-    user.last_login = datetime.utcnow()
+    user.last_login = datetime.now(timezone.utc)
     db.commit()
 
     logger.info(f"Successful login: {form_data.username} ({user_type})")
