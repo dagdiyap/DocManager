@@ -98,39 +98,80 @@ def _ensure_env_file(base: Path):
     print(f"[Setup] Created default config: {env_path}")
 
 
-def _start_whatsapp_server(backend_dir: Path):
-    """Start the Node.js WhatsApp server as a managed subprocess."""
-    server_js = backend_dir / "src" / "services" / "whatsapp" / "server.js"
-    if not server_js.exists():
-        print("[WhatsApp] server.js not found — skipping WhatsApp bot.")
-        return None
+def _check_node_installed():
+    """Verify Node.js is installed. Exit with instructions if not."""
+    try:
+        result = subprocess.run(
+            ["node", "--version"],
+            capture_output=True, timeout=5, check=True, text=True,
+        )
+        print(f"[Setup] Node.js {result.stdout.strip()} found.")
+        return True
+    except (FileNotFoundError, subprocess.SubprocessError):
+        print()
+        print("=" * 56)
+        print("  ERROR: Node.js is not installed.")
+        print("=" * 56)
+        print()
+        print("  Node.js is REQUIRED for the WhatsApp bot.")
+        print()
+        print("  How to fix:")
+        print("    1. Download Node.js from https://nodejs.org/")
+        print("    2. Run the installer (use default settings)")
+        print("    3. Restart this application")
+        print()
+        print("  Or run StartDocManager.bat which installs it")
+        print("  automatically.")
+        print()
+        _wait_and_exit(1)
+        return False
 
-    # Check if Node.js is available
-    node_cmd = "node"
+
+def _check_npm_deps(backend_dir: Path):
+    """Install npm dependencies if missing. Exit on failure."""
+    if (backend_dir / "node_modules" / "whatsapp-web.js").exists():
+        print("[Setup] Node.js dependencies already installed.")
+        return True
+
+    print("[Setup] Installing Node.js dependencies (first run)...")
     try:
         subprocess.run(
-            [node_cmd, "--version"],
-            capture_output=True, timeout=5, check=True,
+            ["npm", "install", "--production"],
+            cwd=str(backend_dir),
+            timeout=180, check=True,
         )
-    except (FileNotFoundError, subprocess.SubprocessError):
-        print("[WhatsApp] Node.js not found — WhatsApp bot will not start.")
-        print("           Install Node.js from https://nodejs.org/ to enable it.")
-        return None
+        print("[Setup] Node.js dependencies installed successfully.")
+        return True
+    except (FileNotFoundError, subprocess.SubprocessError) as e:
+        print()
+        print("=" * 56)
+        print("  ERROR: Failed to install Node.js dependencies.")
+        print("=" * 56)
+        print(f"  Details: {e}")
+        print()
+        print("  How to fix:")
+        print("    1. Check your internet connection")
+        print("    2. Open a terminal in the backend folder")
+        print("    3. Run: npm install --production")
+        print("    4. Restart this application")
+        print()
+        _wait_and_exit(1)
+        return False
 
-    # Check if node_modules exist
-    if not (backend_dir / "node_modules" / "whatsapp-web.js").exists():
-        print("[WhatsApp] Installing Node.js dependencies (first run)...")
-        try:
-            subprocess.run(
-                ["npm", "install", "--production"],
-                cwd=str(backend_dir),
-                capture_output=True, timeout=120, check=True,
-            )
-            print("[WhatsApp] Dependencies installed.")
-        except subprocess.SubprocessError as e:
-            print(f"[WhatsApp] npm install failed: {e}")
-            print("           WhatsApp bot will not start. Run 'npm install' manually.")
-            return None
+
+def _start_whatsapp_server(backend_dir: Path):
+    """Start the Node.js WhatsApp server as a managed subprocess.
+
+    All dependencies must already be verified before calling this.
+    """
+    server_js = backend_dir / "src" / "services" / "whatsapp" / "server.js"
+    if not server_js.exists():
+        print()
+        print("  ERROR: WhatsApp server.js not found at:")
+        print(f"  {server_js}")
+        print("  Installation may be corrupted.")
+        _wait_and_exit(1)
+        return None
 
     if _port_in_use(3002):
         print("[WhatsApp] Port 3002 already in use — assuming server is running.")
@@ -150,7 +191,7 @@ def _start_whatsapp_server(backend_dir: Path):
 
     try:
         proc = subprocess.Popen(
-            [node_cmd, "--max-old-space-size=256", str(server_js)],
+            ["node", "--max-old-space-size=256", str(server_js)],
             cwd=str(backend_dir),
             env=env,
             stdout=subprocess.PIPE,
@@ -160,12 +201,25 @@ def _start_whatsapp_server(backend_dir: Path):
         # Wait briefly to see if it crashes immediately
         time.sleep(2)
         if proc.poll() is not None:
+            out = ""
+            if proc.stdout:
+                out = proc.stdout.read().decode(errors="replace")[:500]
             print(f"[WhatsApp] Server exited immediately (code {proc.returncode}).")
+            if out:
+                print(f"[WhatsApp] Output: {out}")
+            print()
+            print("  How to fix:")
+            print("    1. Open a terminal in the backend folder")
+            print("    2. Run: node src/services/whatsapp/server.js")
+            print("    3. Check the error message and fix it")
+            print()
+            _wait_and_exit(1)
             return None
         print("[WhatsApp] Server started (PID %d)." % proc.pid)
         return proc
     except Exception as e:
         print(f"[WhatsApp] Failed to start: {e}")
+        _wait_and_exit(1)
         return None
 
 
@@ -215,8 +269,13 @@ def main():
 
     _print_banner(host, port, data_dir)
 
+    # --- Verify ALL dependencies before starting ---
+    backend_dir = BUNDLE_DIR if not FROZEN else APP_DIR
+    _check_node_installed()
+    _check_npm_deps(backend_dir)
+
     # --- Start WhatsApp server ---
-    wa_proc = _start_whatsapp_server(BUNDLE_DIR if not FROZEN else APP_DIR)
+    wa_proc = _start_whatsapp_server(backend_dir)
 
     # --- Start backend ---
     import uvicorn
