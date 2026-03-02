@@ -12,7 +12,8 @@ const path = require('path');
 const WhatsAppClient = require('./client');
 
 const app = express();
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 const whatsappClient = new WhatsAppClient();
 let pythonBackendUrl = process.env.BACKEND_URL || 'http://localhost:8443';
@@ -122,12 +123,19 @@ async function initializeWhatsApp() {
 }
 
 /**
- * Health check endpoint.
+ * Health check endpoint with memory stats.
  */
 app.get('/health', (req, res) => {
+    const mem = process.memoryUsage();
     res.json({
         status: 'ok',
-        whatsapp_ready: whatsappClient.isReady
+        whatsapp_ready: whatsappClient.isReady,
+        uptime_seconds: Math.floor(process.uptime()),
+        memory_mb: {
+            rss: Math.round(mem.rss / 1024 / 1024),
+            heap_used: Math.round(mem.heapUsed / 1024 / 1024),
+            heap_total: Math.round(mem.heapTotal / 1024 / 1024)
+        }
     });
 });
 
@@ -170,19 +178,38 @@ app.post('/send-document', async (req, res) => {
 });
 
 /**
- * Get client status.
+ * Get client status with diagnostics.
  */
 app.get('/status', (req, res) => {
+    const mem = process.memoryUsage();
     res.json({
-        ready: whatsappClient.isReady
+        ready: whatsappClient.isReady,
+        uptime_seconds: Math.floor(process.uptime()),
+        memory_mb: Math.round(mem.rss / 1024 / 1024),
+        reconnect_attempts: whatsappClient.reconnectAttempts
     });
 });
+
+// Memory monitoring - warn if usage is high
+setInterval(() => {
+    const mem = process.memoryUsage();
+    const rssMB = Math.round(mem.rss / 1024 / 1024);
+    const heapMB = Math.round(mem.heapUsed / 1024 / 1024);
+    if (rssMB > 400) {
+        console.warn(`[Server] High memory usage: RSS=${rssMB}MB, Heap=${heapMB}MB`);
+        if (global.gc) {
+            global.gc();
+            console.log('[Server] Manual GC triggered');
+        }
+    }
+}, 60000);
 
 // Start server
 const PORT = process.env.WHATSAPP_PORT || 3002;
 
 app.listen(PORT, async () => {
     console.log(`[Server] WhatsApp bot server listening on port ${PORT}`);
+    console.log(`[Server] Memory limit: Use --max-old-space-size=512 for low-memory systems`);
     console.log('[Server] Initializing WhatsApp client...');
     await initializeWhatsApp();
 });

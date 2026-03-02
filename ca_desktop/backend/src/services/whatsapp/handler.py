@@ -2,6 +2,7 @@
 
 import logging
 import re
+import time
 from typing import Optional
 
 import requests
@@ -39,6 +40,10 @@ class MessageHandler:
         self.whatsapp_url = whatsapp_server_url
         
         self.context = {}
+        self._context_timestamps = {}
+        self._last_cleanup = time.time()
+        self._context_ttl = 1800  # 30 minutes
+        self._cleanup_interval = 300  # 5 minutes
         
         logger.info("MessageHandler initialized")
     
@@ -66,10 +71,30 @@ class MessageHandler:
         
         return clean
     
+    def _cleanup_stale_contexts(self):
+        """Remove conversation contexts older than TTL."""
+        now = time.time()
+        if now - self._last_cleanup < self._cleanup_interval:
+            return
+        
+        self._last_cleanup = now
+        stale = [p for p, ts in self._context_timestamps.items() if now - ts > self._context_ttl]
+        for phone in stale:
+            self.context.pop(phone, None)
+            self._context_timestamps.pop(phone, None)
+        if stale:
+            logger.info(f"Cleaned up {len(stale)} stale conversation contexts")
+    
+    def _touch_context(self, phone: str):
+        """Update timestamp for a conversation context."""
+        self._context_timestamps[phone] = time.time()
+    
     async def handle_message(self, phone: str, message: str):
         """Main message routing logic."""
         clean_phone = None
         try:
+            self._cleanup_stale_contexts()
+            
             if not message or not isinstance(message, str):
                 logger.error(f"Invalid message from {phone}: {type(message)}")
                 return
@@ -99,8 +124,10 @@ class MessageHandler:
             # Update last interaction
             self.bot_state.update_last_interaction(clean_phone)
             
-            # Get current context
+            # Get current context and refresh TTL
             ctx = self.context.get(clean_phone, {})
+            if ctx:
+                self._touch_context(clean_phone)
             
             # Route based on message content and context
             message_lower = message.lower().strip()
@@ -152,6 +179,7 @@ class MessageHandler:
     async def handle_welcome(self, phone: str, client_name: str):
         """Send welcome message with main menu."""
         self.context[phone] = {}  # Clear context
+        self._context_timestamps.pop(phone, None)
         await self.send_message(phone, welcome_message(client_name))
     
     async def handle_download_start(self, phone: str):
@@ -172,6 +200,7 @@ class MessageHandler:
                 'step': 'selecting_year',
                 'years': years
             }
+            self._touch_context(phone)
             
             await self.send_message(phone, year_menu(years))
         except Exception as e:
@@ -302,6 +331,7 @@ class MessageHandler:
             'step': 'awaiting_files',
             'files': []
         }
+        self._touch_context(phone)
         
         await self.send_message(phone, upload_prompt())
     

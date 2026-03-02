@@ -19,6 +19,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.request_history = defaultdict(list)
         self.cleanup_interval = 60  # Cleanup every 60 seconds
         self.last_cleanup = time.time()
+        self.max_tracked_ips = 1000  # Cap memory usage
 
     async def dispatch(self, request: Request, call_next):
         # Skip rate limiting for docs, openapi, and internal WhatsApp endpoints
@@ -74,3 +75,12 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
         for ip in ips_to_remove:
             del self.request_history[ip]
+
+        # Hard cap: if too many IPs tracked, drop oldest
+        if len(self.request_history) > self.max_tracked_ips:
+            sorted_ips = sorted(
+                self.request_history.keys(),
+                key=lambda ip: max(self.request_history[ip]) if self.request_history[ip] else 0
+            )
+            for ip in sorted_ips[:len(self.request_history) - self.max_tracked_ips]:
+                del self.request_history[ip]

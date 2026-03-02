@@ -37,22 +37,29 @@ class WhatsAppClient {
                     '--disable-accelerated-2d-canvas',
                     '--no-first-run',
                     '--no-zygote',
+                    '--single-process',
                     '--disable-gpu',
                     '--disable-software-rasterizer',
                     '--disable-extensions',
                     '--disable-background-networking',
                     '--disable-default-apps',
                     '--disable-sync',
+                    '--disable-translate',
+                    '--disable-renderer-backgrounding',
+                    '--disable-background-timer-throttling',
+                    '--disable-backgrounding-occluded-windows',
                     '--metrics-recording-only',
                     '--mute-audio',
                     '--no-default-browser-check',
                     '--disable-features=TranslateUI',
-                    '--disable-ipc-flooding-protection'
+                    '--disable-ipc-flooding-protection',
+                    '--js-flags=--max-old-space-size=256',
+                    '--disable-component-update'
                 ],
-                defaultViewport: {
-                    width: 800,
-                    height: 600
-                }
+                defaultViewport: null
+            },
+            webVersionCache: {
+                type: 'local'
             }
         });
 
