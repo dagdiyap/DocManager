@@ -41,8 +41,9 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
-# WhatsApp session data
+# WhatsApp session and cache data
 .wwebjs_auth/
+.wwebjs_cache/
 
 # Node
 node_modules/

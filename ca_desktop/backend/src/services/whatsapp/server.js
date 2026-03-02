@@ -15,8 +15,8 @@ app.use(bodyParser.json());
 const whatsappClient = new WhatsAppClient();
 let pythonBackendUrl = process.env.BACKEND_URL || 'http://localhost:8443';
 
-// Store for pending responses (simple in-memory queue)
-const messageQueue = [];
+// Only process messages received AFTER server starts
+const serverStartTime = Math.floor(Date.now() / 1000);
 
 /**
  * Initialize WhatsApp client on server start.
@@ -28,6 +28,13 @@ async function initializeWhatsApp() {
         // Register message handler to forward to Python backend
         whatsappClient.onMessage(async (msgData, rawMessage) => {
             try {
+                // Skip old messages from before server started
+                if (msgData.timestamp && msgData.timestamp < serverStartTime) {
+                    return;
+                }
+
+                console.log(`[Server] Incoming message from ${msgData.from}: ${msgData.body?.substring(0, 50)}`);
+
                 // Forward message to Python backend
                 const response = await fetch(`${pythonBackendUrl}/api/v1/whatsapp/incoming`, {
                     method: 'POST',
@@ -126,8 +133,7 @@ app.post('/send-document', async (req, res) => {
  */
 app.get('/status', (req, res) => {
     res.json({
-        ready: whatsappClient.isReady,
-        message_queue_size: messageQueue.length
+        ready: whatsappClient.isReady
     });
 });
 

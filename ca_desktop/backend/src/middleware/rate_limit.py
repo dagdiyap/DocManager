@@ -21,8 +21,12 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.last_cleanup = time.time()
 
     async def dispatch(self, request: Request, call_next):
-        # Skip rate limiting for docs and openapi
-        if request.url.path in ["/docs", "/redoc", "/openapi.json"]:
+        # Skip rate limiting for docs, openapi, and internal WhatsApp endpoints
+        skip_paths = ["/docs", "/redoc", "/openapi.json", "/health"]
+        skip_prefixes = ["/api/v1/whatsapp/"]
+        if request.url.path in skip_paths or any(
+            request.url.path.startswith(p) for p in skip_prefixes
+        ):
             return await call_next(request)
 
         client_ip = request.client.host
