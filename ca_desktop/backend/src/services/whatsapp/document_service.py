@@ -35,12 +35,11 @@ class DocumentService:
                 return None
             
             client = self.db.query(Client).filter(
-                Client.phone_number == clean_phone,
-                Client.is_active == True
+                Client.phone_number == clean_phone
             ).first()
             
             if client:
-                logger.debug(f"Found client: {clean_phone}")
+                logger.debug(f"Found client: {clean_phone} (active={client.is_active})")
             else:
                 logger.debug(f"Client not found: {clean_phone}")
             
@@ -167,7 +166,7 @@ class DocumentService:
         import re
         
         try:
-            if not all([client_phone, file_data, file_name]):
+            if not client_phone or not file_name:
                 raise ValueError("Missing required parameters")
             
             if not isinstance(file_data, bytes):
@@ -179,7 +178,8 @@ class DocumentService:
             if len(file_data) > 100 * 1024 * 1024:
                 raise ValueError(f"File too large: {len(file_data)} bytes")
             
-            safe_filename = re.sub(r'[^a-zA-Z0-9._-]', '_', file_name)
+            base_name = os.path.basename(file_name)
+            safe_filename = re.sub(r'[^a-zA-Z0-9._-]', '_', base_name)
             if not safe_filename:
                 safe_filename = f"upload_{datetime.now().strftime('%Y%m%d%H%M%S')}"
             

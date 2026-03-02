@@ -1,6 +1,6 @@
 """Bot state management for WhatsApp integration."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 from sqlalchemy.orm import Session
@@ -38,12 +38,12 @@ class BotStateManager:
         
         if state:
             state.bot_enabled = False
-            state.last_interaction = datetime.utcnow()
+            state.last_interaction = datetime.now(timezone.utc)
         else:
             state = WhatsAppBotState(
                 phone_number=phone,
                 bot_enabled=False,
-                last_interaction=datetime.utcnow()
+                last_interaction=datetime.now(timezone.utc)
             )
             self.db.add(state)
         
@@ -59,12 +59,12 @@ class BotStateManager:
         
         if state:
             state.bot_enabled = True
-            state.last_interaction = datetime.utcnow()
+            state.last_interaction = datetime.now(timezone.utc)
         else:
             state = WhatsAppBotState(
                 phone_number=phone,
                 bot_enabled=True,
-                last_interaction=datetime.utcnow()
+                last_interaction=datetime.now(timezone.utc)
             )
             self.db.add(state)
         
@@ -80,13 +80,13 @@ class BotStateManager:
         
         if state:
             state.current_flow = flow
-            state.last_interaction = datetime.utcnow()
+            state.last_interaction = datetime.now(timezone.utc)
         else:
             state = WhatsAppBotState(
                 phone_number=phone,
                 bot_enabled=True,
                 current_flow=flow,
-                last_interaction=datetime.utcnow()
+                last_interaction=datetime.now(timezone.utc)
             )
             self.db.add(state)
         
@@ -111,5 +111,5 @@ class BotStateManager:
         ).first()
         
         if state:
-            state.last_interaction = datetime.utcnow()
+            state.last_interaction = datetime.now(timezone.utc)
             self.db.commit()

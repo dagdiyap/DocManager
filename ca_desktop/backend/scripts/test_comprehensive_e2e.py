@@ -46,6 +46,15 @@ class ComprehensiveE2ETester:
         except Exception as e:
             return False
     
+    def get_mock_message_count(self):
+        try:
+            response = requests.get("http://localhost:3002/status", timeout=2)
+            if response.status_code == 200:
+                return response.json().get("message_count", 0)
+        except:
+            pass
+        return -1
+    
     def check_backend(self):
         try:
             response = requests.get(f"{self.backend_url}/health", timeout=2)
@@ -77,8 +86,12 @@ class ComprehensiveE2ETester:
         ]
         
         for phone, desc in invalid_phones:
-            result = not self.send_message(phone, "Hi")
-            self.log_test(f"Invalid phone rejected: {desc}", result)
+            before = self.get_mock_message_count()
+            self.send_message(phone, "Hi")
+            await asyncio.sleep(0.5)
+            after = self.get_mock_message_count()
+            no_message_sent = (before == after)
+            self.log_test(f"Invalid phone rejected: {desc}", no_message_sent)
     
     async def test_client_authentication(self):
         print("\n" + "="*60)

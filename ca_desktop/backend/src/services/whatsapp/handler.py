@@ -42,6 +42,13 @@ class MessageHandler:
         
         logger.info("MessageHandler initialized")
     
+    def _format_outbound_phone(self, phone: str) -> str:
+        """Format 10-digit phone to WhatsApp format with country code."""
+        clean = re.sub(r'[^0-9]', '', phone)
+        if len(clean) == 10:
+            return f"91{clean}"
+        return clean
+    
     def _validate_and_normalize_phone(self, phone: str) -> Optional[str]:
         """Validate and normalize phone number."""
         if not phone or not isinstance(phone, str):
@@ -362,7 +369,7 @@ class MessageHandler:
         try:
             response = requests.post(
                 f"{self.whatsapp_url}/send-message",
-                json={"phone": phone, "message": text},
+                json={"phone": self._format_outbound_phone(phone), "message": text},
                 timeout=10
             )
             response.raise_for_status()
@@ -393,7 +400,7 @@ class MessageHandler:
         try:
             response = requests.post(
                 f"{self.whatsapp_url}/send-document",
-                json={"phone": phone, "file_path": file_path, "caption": caption},
+                json={"phone": self._format_outbound_phone(phone), "file_path": file_path, "caption": caption},
                 timeout=30
             )
             response.raise_for_status()

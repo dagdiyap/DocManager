@@ -13,7 +13,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const whatsappClient = new WhatsAppClient();
-let pythonBackendUrl = 'http://localhost:8000';
+let pythonBackendUrl = process.env.BACKEND_URL || 'http://localhost:8443';
 
 // Store for pending responses (simple in-memory queue)
 const messageQueue = [];

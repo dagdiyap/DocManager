@@ -41,6 +41,9 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
+# WhatsApp session data
+.wwebjs_auth/
+
 # Node
 node_modules/
 npm-debug.log*
