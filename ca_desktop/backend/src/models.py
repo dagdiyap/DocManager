@@ -408,3 +408,30 @@ class TaskQueue(Base):
     started_at = Column(DateTime, nullable=True)
     completed_at = Column(DateTime, nullable=True)
     error_message = Column(Text, nullable=True)
+
+
+class DocumentUpload(Base):
+    """Documents uploaded by clients via WhatsApp."""
+
+    __tablename__ = "document_uploads"
+
+    id = Column(Integer, primary_key=True, index=True)
+    client_phone = Column(String(15), ForeignKey("clients.phone_number", ondelete="CASCADE"), nullable=False, index=True)
+    file_name = Column(String(255), nullable=False)
+    file_path = Column(Text, nullable=False)
+    file_size = Column(BigInteger, nullable=True)
+    mime_type = Column(String(100), nullable=True)
+    uploaded_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    processed = Column(Boolean, default=False, nullable=False)
+    notes = Column(Text, nullable=True)
+
+
+class WhatsAppBotState(Base):
+    """Bot state for WhatsApp conversations."""
+
+    __tablename__ = "whatsapp_bot_state"
+
+    phone_number = Column(String(15), primary_key=True)
+    bot_enabled = Column(Boolean, default=True, nullable=False)
+    last_interaction = Column(DateTime, nullable=True)
+    current_flow = Column(String(50), nullable=True)

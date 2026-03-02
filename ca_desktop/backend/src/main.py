@@ -151,6 +151,10 @@ app.include_router(reminders_v2.router, prefix="/api/v1")
 app.include_router(ca_profile.router, prefix="/api/v1")
 app.include_router(public.router, prefix="/api/v1")
 
+# WhatsApp bot integration
+from .routers import whatsapp
+app.include_router(whatsapp.router, prefix="/api/v1")
+
 
 # Mount Frontend Static Files (Client Portal UI)
 # Determine frontend dist path relative to this file

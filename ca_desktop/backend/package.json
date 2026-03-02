@@ -1,0 +1,20 @@
+{
+  "name": "ca-desktop-whatsapp",
+  "version": "1.0.0",
+  "main": "src/services/whatsapp/server.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "whatsapp": "node src/services/whatsapp/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["whatsapp", "bot", "document-delivery"],
+  "author": "Dagdiya Associates",
+  "license": "ISC",
+  "description": "WhatsApp bot for document delivery",
+  "dependencies": {
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.34.6"
+  }
+}
