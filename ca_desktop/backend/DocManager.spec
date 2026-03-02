@@ -1,28 +1,43 @@
 # -*- mode: python ; coding: utf-8 -*-
 """
 PyInstaller spec file for DocManager CA Desktop
-Optimized for production Windows deployment
+Build on Windows: pyinstaller DocManager.spec
 """
 
 import sys
 from pathlib import Path
 
-# Get the base directory
 base_dir = Path(SPECPATH)
+project_root = base_dir.parent.parent  # DocManager/
 
-# Analysis: Discover all imports and dependencies
 a = Analysis(
     ['main_prod.py'],
-    pathex=[str(base_dir)],
+    pathex=[
+        str(base_dir),
+        str(project_root),
+    ],
     binaries=[],
     datas=[
-        # Include source code
+        # Backend source code
         ('src', 'src'),
-        # Include shared utilities
-        ('../../shared', 'shared'),
+        # Shared utilities (lives outside backend)
+        (str(project_root / 'shared'), 'shared'),
+        # Frontend dist (if built)
+        *(
+            [('../frontend/dist', 'frontend/dist')]
+            if (base_dir / '..' / 'frontend' / 'dist' / 'index.html').resolve().exists()
+            else []
+        ),
+        # WhatsApp server JS files (Node.js runs as subprocess)
+        ('src/services/whatsapp/server.js', 'src/services/whatsapp'),
+        ('src/services/whatsapp/client.js', 'src/services/whatsapp'),
+        ('src/services/whatsapp/mock_server.js', 'src/services/whatsapp'),
+        ('package.json', '.'),
+        # Default env template
+        ('.env.example', '.'),
     ],
     hiddenimports=[
-        # FastAPI and dependencies
+        # --- FastAPI / Uvicorn ---
         'fastapi',
         'uvicorn',
         'uvicorn.logging',
@@ -35,67 +50,93 @@ a = Analysis(
         'uvicorn.protocols.websockets.auto',
         'uvicorn.lifespan',
         'uvicorn.lifespan.on',
-        
-        # SQLAlchemy
+        'starlette',
+        'starlette.responses',
+        'starlette.staticfiles',
+
+        # --- SQLAlchemy ---
         'sqlalchemy',
-        'sqlalchemy.ext',
-        'sqlalchemy.ext.declarative',
         'sqlalchemy.orm',
+        'sqlalchemy.orm.decl_api',
         'sqlalchemy.pool',
         'sqlalchemy.dialects.sqlite',
-        
-        # Pydantic
+        'sqlalchemy.ext.hybrid',
+
+        # --- Pydantic ---
         'pydantic',
         'pydantic.fields',
         'pydantic_settings',
-        
-        # Authentication
+
+        # --- Auth / Security ---
         'jose',
         'jose.jwt',
-        'passlib',
-        'passlib.handlers',
-        'passlib.handlers.bcrypt',
+        'jose.backends',
+        'jose.backends.native_types',
         'bcrypt',
-        
-        # Email
+
+        # --- Email ---
         'resend',
-        
-        # Other dependencies
+
+        # --- Other deps ---
         'aiofiles',
         'python_multipart',
+        'multipart',
         'qrcode',
         'PIL',
         'slugify',
         'openpyxl',
         'pandas',
+
+        # --- Our own modules (PyInstaller misses dynamic imports) ---
+        'src.main',
+        'src.config',
+        'src.database',
+        'src.models',
+        'src.schemas',
+        'src.dependencies',
+        'src.exceptions',
+        'src.routers.auth',
+        'src.routers.ca_profile',
+        'src.routers.clients',
+        'src.routers.compliance',
+        'src.routers.documents',
+        'src.routers.messaging',
+        'src.routers.public',
+        'src.routers.reminders',
+        'src.routers.reminders_v2',
+        'src.routers.tags',
+        'src.routers.whatsapp',
+        'src.middleware.rate_limit',
+        'src.middleware.request_logging',
+        'src.modules.documents.scanner',
+        'src.modules.documents.tagger',
+        'src.modules.files.streamer',
+        'src.services.audit_service',
+        'src.services.email_service',
+        'src.services.reminder_service',
+        'src.services.whatsapp.handler',
+        'src.services.whatsapp.bot_state',
+        'src.services.whatsapp.document_service',
+        'src.services.whatsapp.templates',
+        'shared',
+        'shared.crypto',
+        'shared.crypto.keys',
+        'shared.crypto.tokens',
+        'shared.crypto.signing',
+        'shared.crypto.fingerprint',
+        'shared.utils',
+        'shared.utils.logging',
+        'shared.utils.validators',
+        'shared.utils.constants',
     ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[
-        # Exclude test frameworks
-        'pytest',
-        'pytest_asyncio',
-        'pytest_cov',
-        'httpx',
-        
-        # Exclude development tools
-        'black',
-        'isort',
-        'mypy',
-        'pylint',
-        
-        # Exclude unnecessary modules
-        'tkinter',
-        'matplotlib',
-        'IPython',
-        'notebook',
-        'jupyter',
-        
-        # Exclude large unused libraries
-        'scipy',
-        'numpy.distutils',
-        'numpy.f2py',
+        'pytest', 'pytest_asyncio', 'pytest_cov', 'httpx',
+        'black', 'isort', 'mypy', 'pylint', 'ruff',
+        'tkinter', 'matplotlib', 'IPython', 'notebook', 'jupyter',
+        'scipy', 'numpy.distutils', 'numpy.f2py',
     ],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
@@ -103,10 +144,9 @@ a = Analysis(
     noarchive=False,
 )
 
-# Remove duplicate binaries
 pyz = PYZ(a.pure, a.zipped_data, cipher=None)
 
-# Create executable
+# --- Single-file .exe (simple distribution) ---
 exe = EXE(
     pyz,
     a.scripts,
@@ -118,25 +158,25 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,  # Enable UPX compression
+    upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=True,  # Show console for logs
+    console=True,   # Keep console visible so CA can see status
     disable_windowed_traceback=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=None,  # TODO: Add icon file
+    icon=None,  # TODO: Add .ico file
 )
 
-# Optional: Create a COLLECT for folder distribution (uncomment if needed)
-# coll = COLLECT(
-#     exe,
-#     a.binaries,
-#     a.zipfiles,
-#     a.datas,
-#     strip=False,
-#     upx=True,
-#     upx_exclude=[],
-#     name='DocManager',
-# )
+# --- Folder distribution (faster startup, easier debugging) ---
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    name='DocManager',
+)
