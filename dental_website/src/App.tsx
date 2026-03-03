@@ -104,7 +104,7 @@ export default function App() {
         <AnimatePresence mode="wait">
           <motion.div key={heroIdx} className="absolute inset-0"
             initial={{ opacity: 0, scale: 1.1 }} animate={{ opacity: 0.2, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }}>
-            <img src={HERO_IMGS[heroIdx]} alt="" className="w-full h-full object-cover" />
+            <img src={HERO_IMGS[heroIdx]} alt="Best dentist in Nanded - Dagdiya Laser Dental Clinic" className="w-full h-full object-cover" />
           </motion.div>
         </AnimatePresence>
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-transparent to-slate-900/80" />
@@ -118,47 +118,51 @@ export default function App() {
         <motion.div className="relative z-10 w-full" style={{ y: heroY }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20 md:pt-0 md:pb-0 md:min-h-screen md:flex md:items-center">
             <div className="w-full text-center">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-                <motion.div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 border border-white/15 backdrop-blur-sm mb-6"
-                  animate={{ boxShadow: ['0 0 0 0 rgba(20,184,166,0)', '0 0 0 8px rgba(20,184,166,0.1)', '0 0 0 0 rgba(20,184,166,0)'] }}
-                  transition={{ duration: 2, repeat: Infinity }}>
-                  <Sparkles className="w-4 h-4 text-teal-400" />
-                  <span className="text-teal-300 text-sm font-medium">Nanded's Most Trusted Dental Clinic</span>
-                </motion.div>
-              </motion.div>
+              {/* Badge removed — cleaner hero on mobile */}
 
-              <motion.h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-teal-300 mb-3 tracking-wide"
+              <motion.h2 className="text-lg sm:text-2xl md:text-3xl font-display font-bold text-teal-300 mb-2 tracking-wide"
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>
                 Dagdiya Laser Dental Clinic
               </motion.h2>
 
-              <motion.h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-bold text-white leading-[0.9] mb-4"
-                initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
-                Your <span className="gradient-text">Smile</span><br />
-                Our <span className="gradient-text-pink">Passion</span>
+              <motion.h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-display font-bold text-white leading-[0.9] mb-3"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.2 }}>
+                <motion.span className="inline-block" initial={{ opacity: 0, y: 60, rotateX: -90 }} animate={{ opacity: 1, y: 0, rotateX: 0 }} transition={{ duration: 0.9, delay: 0.3, type: 'spring', stiffness: 100 }}>
+                  Your{' '}
+                </motion.span>
+                <motion.span className="inline-block gradient-text" initial={{ opacity: 0, scale: 0.3 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.6, type: 'spring', stiffness: 120 }}>
+                  Smile
+                </motion.span>
+                <br />
+                <motion.span className="inline-block" initial={{ opacity: 0, y: 60, rotateX: -90 }} animate={{ opacity: 1, y: 0, rotateX: 0 }} transition={{ duration: 0.9, delay: 0.8, type: 'spring', stiffness: 100 }}>
+                  Our{' '}
+                </motion.span>
+                <motion.span className="inline-block gradient-text-pink" initial={{ opacity: 0, scale: 0.3 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 1.0, type: 'spring', stiffness: 120 }}>
+                  Passion
+                </motion.span>
               </motion.h1>
 
-              <motion.p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-8"
-                initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }}>
-                Advanced dental excellence by{' '}
+              <motion.p className="text-sm sm:text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-6"
+                initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.2 }}>
+                Dental excellence by{' '}
                 <span className="whitespace-nowrap"><span className="text-teal-400 font-semibold">Dr. Rajesh Dagdiya</span> & <span className="text-pink-400 font-semibold">Dr. Rekha Dagdiya</span></span>
               </motion.p>
 
-              <motion.div className="flex flex-col sm:flex-row gap-4 justify-center"
+              <motion.div className="flex flex-row gap-3 justify-center"
                 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }}>
-                <WABtn text="Book Appointment" large />
+                <WABtn text="Book Appointment" />
                 <motion.a href="#services"
-                  className="inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold text-white border-2 border-white/20 rounded-full hover:bg-white/10 transition-all"
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg font-semibold text-white border-2 border-white/20 rounded-full hover:bg-white/10 transition-all"
                   whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  Our Services <ArrowRight className="w-5 h-5" />
+                  Our Services <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </motion.a>
               </motion.div>
 
-              <motion.div className="flex gap-8 md:gap-12 mt-12 justify-center flex-wrap"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
+              <motion.div className="flex gap-6 md:gap-12 mt-8 justify-center flex-wrap"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}>
                 {[
-                  { icon: <Heart className="w-5 h-5" />, label: '20+ Yrs', sub: 'Experience' },
-                  { icon: <Smile className="w-5 h-5" />, label: '15K+', sub: 'Happy Smiles' },
+                  { icon: <Heart className="w-5 h-5" />, label: '25+ Yrs', sub: 'Experience' },
+                  { icon: <Smile className="w-5 h-5" />, label: '20K+', sub: 'Happy Smiles' },
                   { icon: <Zap className="w-5 h-5" />, label: 'Painless', sub: 'Laser Care' },
                 ].map((item, i) => (
                   <motion.div key={i} className="text-center" whileHover={{ scale: 1.1 }}>
@@ -176,7 +180,7 @@ export default function App() {
       </section>
 
       {/* ════════════════ LANDO-STYLE TEXT REVEAL WITH TEETH BACKGROUND ════════════════ */}
-      <div ref={smileRef} className="relative h-[100vh] overflow-hidden bg-slate-950 flex items-center justify-center">
+      <div ref={smileRef} className="relative h-[50vh] sm:h-[60vh] overflow-hidden bg-slate-950 flex items-center justify-center">
         {/* Animated teeth SVG background — revealed by scroll clip */}
         <motion.div className="absolute inset-0" style={{ scale: smileScale }}>
           <motion.div className="absolute inset-0"
@@ -218,7 +222,7 @@ export default function App() {
 
         {/* Main text — "Ready for Your Best Smile?" */}
         <motion.div className="relative z-10 text-center px-4" style={{ opacity: smileTextOp }}>
-          <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-black leading-[1.1] text-white mix-blend-difference select-none">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-display font-black leading-[1.1] text-white mix-blend-difference select-none">
             Ready for Your<br />
             <span className="gradient-text">Best Smile?</span>
           </h2>
@@ -301,11 +305,10 @@ export default function App() {
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
             {SERVICES.map((svc, i) => {
-              const floatY = [6, -8, 7, -6, 8, -7, 5, -9, 6][i % 9];
-              const floatDur = [5, 6.5, 5.5, 7, 4.5, 6, 5.2, 7.2, 4.8][i % 9];
-              const floatDelay = [0, 0.8, 1.6, 0.4, 1.2, 2, 0.6, 1.4, 1.8][i % 9];
-              const heights = [160, 210, 175, 195, 165, 215, 170, 200, 180];
-              const h = heights[i % 9];
+              const floatY = [6, -8, 7, -6, 8, -7, 5, -9][i % 8];
+              const floatDur = [5, 6.5, 5.5, 7, 4.5, 6, 5.2, 7.2][i % 8];
+              const floatDelay = [0, 0.8, 1.6, 0.4, 1.2, 2, 0.6, 1.4][i % 8];
+              const h = 180; // uniform height for all cards
               return (
                 <motion.div key={i}
                   className="relative cursor-pointer group"
@@ -398,7 +401,7 @@ export default function App() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div className="relative" initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <img src={INAUG} alt="Clinic inauguration with Ex Chief Minister" className="w-full h-[400px] md:h-[500px] object-cover" />
+                <img src={INAUG} alt="Dagdiya Laser Dental Clinic Nanded inauguration by Ex Chief Minister - Dr Rajesh Dagdiya" className="w-full h-[400px] md:h-[500px] object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
                   <motion.div className="bg-gradient-to-r from-teal-600/90 to-teal-500/90 backdrop-blur-sm rounded-xl p-4 md:p-5 border border-teal-400/30"
@@ -415,7 +418,7 @@ export default function App() {
               </div>
               <motion.div className="absolute -top-4 -right-4 md:right-4 bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl p-5 shadow-xl shadow-teal-500/30"
                 animate={{ y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}>
-                <p className="text-4xl font-display font-bold text-white">27+</p>
+                <p className="text-4xl font-display font-bold text-white">25+</p>
                 <p className="text-teal-100 text-sm">Years of<br />Excellence</p>
               </motion.div>
             </motion.div>
@@ -423,7 +426,7 @@ export default function App() {
             <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
               <div className="space-y-8">
                 {[
-                  { initials: 'RD', name: 'Dr. Rajesh Dagdiya', role: 'Prosthodontist & Implantologist', desc: 'Pioneer of laser dentistry in Nanded. Renowned for dental implants, orthodontics, and advanced prosthodontics.', gradient: 'from-teal-500 to-teal-600', shadow: 'shadow-teal-500/30' },
+                  { initials: 'RD', name: 'Dr. Rajesh Dagdiya', role: 'Prosthodontist & Implantologist', desc: 'Pioneer of laser dentistry in Nanded. Renowned for dental implants, orthodontics, and prosthodontics.', gradient: 'from-teal-500 to-teal-600', shadow: 'shadow-teal-500/30' },
                   { initials: 'RD', name: 'Dr. Rekha Dagdiya', role: 'General & Cosmetic Dentistry', desc: 'Expert in root canals, cosmetic dentistry, and pediatric care.', gradient: 'from-pink-500 to-pink-600', shadow: 'shadow-pink-500/30' },
                 ].map((doc, i) => (
                   <div key={i} className="flex gap-5">
@@ -500,23 +503,23 @@ export default function App() {
       </section>
 
       {/* ════════════════ CTA ════════════════ */}
-      <section className="py-24 relative overflow-hidden bg-gradient-to-r from-teal-600 via-teal-500 to-cyan-500">
+      <section className="py-12 sm:py-16 relative overflow-hidden bg-gradient-to-r from-teal-600 via-teal-500 to-cyan-500">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '30px 30px' }} />
         <FTooth className="absolute top-10 left-10 w-20 h-20 opacity-20" />
         <FTooth className="absolute bottom-10 right-10 w-16 h-16 opacity-15" delay={3} />
         <motion.div className="max-w-4xl mx-auto px-4 text-center relative z-10"
           initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <motion.div className="inline-block mb-6" animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 4, repeat: Infinity }}>
-            <span className="text-6xl">😊</span>
+          <motion.div className="inline-block mb-4" animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 4, repeat: Infinity }}>
+            <span className="text-5xl">😊</span>
           </motion.div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-6">Ready for Your<br /><span className="text-teal-100">Best Smile?</span></h2>
-          <p className="text-xl text-teal-100 mb-10 max-w-2xl mx-auto">Book your consultation today. Walk-ins welcome!</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <WABtn text="WhatsApp Us Now" large className="bg-white !text-teal-700 hover:!bg-gray-100" />
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-4">Ready for Your<br /><span className="text-teal-100">Best Smile?</span></h2>
+          <p className="text-base sm:text-lg text-teal-100 mb-8 max-w-2xl mx-auto">Book your consultation today. Walk-ins welcome!</p>
+          <div className="flex flex-row gap-3 justify-center">
+            <WABtn text="WhatsApp Us Now" className="bg-white !text-teal-700 hover:!bg-gray-100" />
             <motion.a href="tel:+919422185785"
-              className="inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold text-white border-2 border-white/40 rounded-full hover:bg-white/10 transition-all"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-lg font-semibold text-white border-2 border-white/40 rounded-full hover:bg-white/10 transition-all"
               whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Phone className="w-5 h-5" /> Call: 94221 85785
+              <Phone className="w-4 h-4 sm:w-5 sm:h-5" /> Call: 94221 85785
             </motion.a>
           </div>
         </motion.div>
@@ -561,7 +564,7 @@ export default function App() {
           <div className="grid md:grid-cols-3 gap-12 mb-12">
             <div>
               <Logo size={50} showText light />
-              <p className="text-gray-400 mt-4 text-sm leading-relaxed">Dagdiya Laser Dental Clinic — Nanded's premier dental care destination.</p>
+              <p className="text-gray-400 mt-4 text-sm leading-relaxed">Dagdiya Laser Dental Clinic — Nanded's premier destination for dental implants, laser dentistry, orthodontics, root canal treatment, cosmetic dentistry, and pediatric dental care.</p>
             </div>
             <div>
               <h4 className="font-bold text-lg mb-4">Our Services</h4>
@@ -578,7 +581,7 @@ export default function App() {
           </div>
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-500 text-sm">© {new Date().getFullYear()} Dagdiya Laser Dental Clinic. All rights reserved.</p>
-            <p className="text-gray-500 text-sm"><span className="font-script text-teal-400 text-base">Caring For Your Smile</span> since 2004</p>
+            <p className="text-gray-500 text-sm"><span className="font-script text-teal-400 text-base">Caring For Your Smile</span> since 2001</p>
           </div>
         </div>
       </footer>

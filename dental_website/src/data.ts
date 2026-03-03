@@ -18,13 +18,12 @@ export const SERVICES = [
   { title: 'Root Canal Treatment', desc: 'Save damaged teeth with painless modern therapy.', detail: 'Root canal treatment addresses the pulp — the nerves and blood vessels in the center of the tooth. When the pulp becomes infected or inflamed, this procedure removes the damaged tissue, cleans the canal system, and seals it to prevent further infection. Modern techniques ensure the procedure is virtually painless.', image: '/services/root-canal.jpg', color: '#d97706' },
   { title: 'Full Mouth Rehabilitation', desc: 'Complete reconstruction for a brand new smile.', detail: 'Full mouth rehabilitation restores lost tooth structure and corrects improper bite position. This comprehensive set of procedures addresses chipped or worn-out teeth, restores vertical dimensions, and corrects jaw position — which can help with headaches, neck aches, and neuro-muscular disorders while enhancing cosmetic appearance.', image: 'https://images.pexels.com/photos/3845653/pexels-photo-3845653.jpeg?auto=compress&cs=tinysrgb&w=600', color: '#0891b2' },
   { title: 'Pediatric Dentistry', desc: 'Gentle, fun dental care for children.', detail: 'Good oral health is essential for growing children. We provide preventive care, pit & fissure sealants, habit-breaking appliances, space maintainers, and gentle endodontic treatments. Our child-friendly environment ensures kids feel comfortable and even enjoy their dental visits.', image: '/services/pediatric.jpg', color: '#0284c7' },
-  { title: 'Crown & Bridges', desc: 'Fixed prosthetics to restore damaged or missing teeth.', detail: 'Crowns and bridges are fixed prosthetic devices cemented onto existing teeth or implants. Crowns cap damaged teeth to restore their shape and strength, while bridges replace one or more missing teeth by anchoring to adjacent teeth. Both are custom-made to match your natural teeth perfectly.', image: 'https://images.pexels.com/photos/3845557/pexels-photo-3845557.jpeg?auto=compress&cs=tinysrgb&w=600', color: '#059669' },
   { title: 'Oral Surgery', desc: 'Expert surgical procedures for complex dental needs.', detail: 'From wisdom tooth extractions to advanced jaw surgery, our oral surgery services cover the full spectrum. Wisdom teeth often become impacted and need extraction. We also perform biopsies, treat gum diseases at advanced stages, and handle complex surgical cases with precision and care.', image: '/services/oral-surgery.webp', color: '#e11d48' },
 ];
 
 export const STATS = [
-  { value: 27, suffix: '+', label: 'Trusted Years' },
-  { value: 18000, suffix: '+', label: 'Satisfied Patients' },
+  { value: 25, suffix: '+', label: 'Years of Experience' },
+  { value: 20000, suffix: '+', label: 'Patients Served' },
   { value: 50, suffix: '+', label: 'Comprehensive Services' },
   { value: 2, suffix: '', label: 'Expert Doctors' },
 ];
