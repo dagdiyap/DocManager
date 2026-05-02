@@ -22,3 +22,6 @@
 - **Website UI/UX Overhaul**: Updated hero with moving banner carousel, DAGDIYA ASSOCIATES heading, 47-year legacy content, 6 CA services, 3 personalized testimonials, Industries blur backgrounds. Added password reset flow. Cleaned DB of placeholder entries.
 - **Standalone Website**: Created `ca_website/` — independent React+Vite project, zero backend dependency, all data hardcoded. Deployed to Vercel (dagdiyap/DocManager). Build: 179KB JS, 19KB CSS.
 - **Cloudflare Tunnel E2E**: Installed cloudflared, exposed backend 0.0.0.0:8443 via tunnel. 6/6 tests passed (health, public API, client login, document fetch, portal metadata). Resource: 188MB total (backend 149MB + tunnel 39MB), <1% CPU.
+
+## 2026-03-03
+- **Dental Website Mobile UX + SEO**: 10 mobile UI fixes (removed badge, smaller buttons, hero declutter, stagger animation, stats 25yrs/20K+, section height reductions, 3x marquee, uniform service cards, 1.5x counter, removed Crown & Bridges). Comprehensive SEO (JSON-LD Dentist+FAQ schemas, 24 meta keywords for "dentist in Nanded", OG/Twitter cards, canonical URL, geo meta).
